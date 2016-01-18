@@ -28,5 +28,5 @@
 *.app
 
 # dSYM
-.dSYM
+*.dSYM
 
