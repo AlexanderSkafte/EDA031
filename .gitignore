@@ -27,6 +27,7 @@
 *.out
 *.app
 
-# dSYM
+# Other
 *.dSYM
+*.d
 
