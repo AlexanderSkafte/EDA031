@@ -9,12 +9,14 @@ using namespace std;
 
 int main() {
 	Dictionary dict;
+	cout << "Ready" << endl;
 	string word;
 	while (cin >> word) {
 		transform(word.begin(), word.end(), word.begin(), ::tolower);
 		if (dict.contains(word)) {
 			cout << "Correct." << endl;
 		} else {
+//			cout << "asdasdasdasdasd" << endl;
 			vector<string> suggestions = dict.get_suggestions(word);
 			if (suggestions.empty()) {
 				cout << "Wrong, no suggestions." << endl;

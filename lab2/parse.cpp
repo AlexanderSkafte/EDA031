@@ -6,12 +6,12 @@
 #include <vector>
 
 template <typename T>
-bool contains(const std::vector<T> v, const T& x)
+bool contains(const std::vector<T>& v, const T& x)
 {
 	return std::find(v.begin(), v.end(), x) != v.end();
 }
 
-std::vector<std::string> unique_trigrams(std::string word)
+std::vector<std::string> unique_trigrams(const std::string& word)
 {
 	std::vector<std::string> trigrams;
 	if (word.length() == 1 || word.length() == 2) {
