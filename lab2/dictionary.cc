@@ -22,7 +22,6 @@ Dictionary::Dictionary()
 	ifstream		input("words.txt");
 	int				size;
 	string			line, word, trigram;
-	vector<string>	trigrams;
 
 	// Count lines in input file, then reverse the stream
 	unsigned long nlines = count(	istreambuf_iterator<char>(input),
@@ -34,11 +33,49 @@ Dictionary::Dictionary()
 
 	// Reserve memory for every vector in words to improve push_back speed
 	for (vector<Word> v : words) {
-		v.reserve(nlines / max_length);
+		v.reserve(150000);
 	}
 
-	//unsigned int i = 0;
+	string s[250000];
+	unsigned int i = 0;
+	while (getline(input, line)) {
+		s[i++] = line;
+	}
+	input.close();
 
+	cout << "done 1" << endl;
+
+	for (i = 0; i < 250000; ++i) {
+		vector<string>	trigrams;		// XXX <---------------------
+		istringstream iss(s[i]);
+
+		// Read the first word
+		iss >> word;	
+
+		// Words must be below a certain length to be considered
+		if (word.length() > max_length) {
+			continue;
+		}
+
+		// Get the number of trigrams (this value is ignored)
+		iss >> size;	
+
+		// Read in all trigrams and add the to the trigrams vector
+		while (iss >> trigram) {
+			trigrams.push_back(trigram);
+		}
+
+		// Add Word to the vector containing words of the correct length
+		words[word.length()].push_back(Word(word, trigrams));
+
+		cout << i << endl;
+
+		iss.clear();
+	}
+
+	cout << "done 2" << endl;
+
+#if 0
 	while (getline(input, line)) {
 
 		istringstream iss(line);
@@ -66,6 +103,7 @@ Dictionary::Dictionary()
 	}
 
 	input.close();
+#endif
 }
 
 bool
