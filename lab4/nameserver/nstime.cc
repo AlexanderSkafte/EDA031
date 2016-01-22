@@ -3,10 +3,10 @@
  * the three different name server implementations.
  */
 #include "nameserverinterface.h"
-#include "vns.h"
-#include "mns.h"
-#include "umns.h"
-#include "hns.h"
+#include "vns.hpp"
+#include "mns.hpp"
+#include "umns.hpp"
+#include "hns.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -158,3 +158,4 @@ int main() {
 	avgTime = measureTime(hns, data, nbrSearches, seed);
 	cout << "Average search time (ms): " << avgTime << endl;
 }
+

@@ -17,7 +17,7 @@ public:
 
 	HNS(const int size)
 	{
-		this.size = size;
+		this->size = size;
 	}
 
 	/*
