@@ -36,5 +36,6 @@ echo
 echo "-- Diff bit test 2:"
 diff outb2 correct
 
+echo
 rm -f sb b1 b2 outsb outb1 outb2
 
