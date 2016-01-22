@@ -1,0 +1,7 @@
+
+lab2:
+	Get correct output.
+
+lab4:
+	Implement hash table.
+
