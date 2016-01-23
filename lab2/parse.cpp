@@ -30,7 +30,7 @@ std::vector<std::string> unique_trigrams(const std::string& word)
 int main(int argc, char* argv[])
 {
 	if (argc != 1) {
-		std::cout << "usage: parse" << std::endl;
+		std::cout << "usage: " << argv[0] << std::endl;
 		exit(1);
 	}
 

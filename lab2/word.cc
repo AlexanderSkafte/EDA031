@@ -5,8 +5,8 @@
 using namespace std;
 
 Word::Word(const string& w, const vector<string>& t)
-	: w_{w}
-	, t_{t}
+	: word_{w}
+	, trigrams_{t}
 { /* intentionally empty */ }
 
 // TODO - Make more effictient.
@@ -19,29 +19,11 @@ unsigned int
 Word::get_matches(const vector<string>& t) const {
 	unsigned int num = 0;
 	for (auto& trigram : t) {
-		if (CONTAINS(t_, trigram)) {
+		if (CONTAINS(trigrams_, trigram)) {
 			num += 1;
 		}
 	}
 	return num;
-}
-
-// Alternatively, make this static and take a const string& word argument
-vector<string>
-Word::unique_trigrams() const
-{
-	vector<string> trigrams;
-	if (w_.length() == 1 || w_.length() == 2) {
-		return trigrams;
-	}
-	for (unsigned long i = 0; i < w_.length() - 2; ++i) {
-		string trigram(w_.substr(i, 3));
-		if (!CONTAINS(trigrams, trigram)) {
-			trigrams.push_back(trigram);
-		}
-	}
-	sort(trigrams.begin(), trigrams.end());
-	return trigrams;
 }
 
 vector<string>
@@ -51,8 +33,26 @@ Word::unique_trigrams(const string& word)
 	if (word.length() == 1 || word.length() == 2) {
 		return trigrams;
 	}
-	for (unsigned long i = 0; i < word.length() - 2; ++i) {
+	for (unsigned long i = 0; i < word.length() - 3; ++i) {
 		string trigram(word.substr(i, 3));
+		if (!CONTAINS(trigrams, trigram)) {
+			trigrams.push_back(trigram);
+		}
+	}
+	sort(trigrams.begin(), trigrams.end());
+	return trigrams;
+}
+
+vector<string>
+Word::unique_trigrams(const Word& word)
+{
+	vector<string> trigrams;
+	string w = word.get_word();
+	if (w.length() == 1 || w.length() == 2) {
+		return trigrams;
+	}
+	for (unsigned long i = 0; i < w.length() - 3; ++i) {
+		string trigram(w.substr(i, 3));
 		if (!CONTAINS(trigrams, trigram)) {
 			trigrams.push_back(trigram);
 		}

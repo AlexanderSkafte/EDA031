@@ -9,8 +9,9 @@ using namespace std;
 
 int main() {
 	Dictionary dict;
-	cout << "Ready" << endl;
+	cout << "Ready; enter a word to have it spell checked:" << endl;
 	string word;
+	cout << "> ";
 	while (cin >> word) {
 		transform(word.begin(), word.end(), word.begin(), ::tolower);
 		if (dict.contains(word)) {
@@ -26,6 +27,7 @@ int main() {
 				}
 			}
 		}
+		cout << "> ";
 	}
 }
 

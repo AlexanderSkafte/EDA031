@@ -37,13 +37,13 @@ private:
 			const std::string& s1,
 			const std::string& s2) const;
 
-//	std::unordered_set<std::string> words;
-	static const unsigned int max_length = 10;
-	static const unsigned int trim_size  = 5;
+	static const unsigned int MAX_LENGTH = 25;
+	static const unsigned int TRIM_SIZE  = 5;
 
 	// The 0:th element (words with 0 characters) will be ignored.
 	// word[i] will return the vector containing words of length i.
-	std::vector<Word> words[max_length + 1];
+	std::vector<Word> words[MAX_LENGTH + 1];
 };
 
 #endif
+
