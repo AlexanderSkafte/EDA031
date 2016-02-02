@@ -29,7 +29,7 @@ ltest: ltest.o list.o
 
 # Standard clean
 clean:
-	rm -f *.o *.d $(PROGS)
+	rm -rf *.o *.d *.dSYM $(PROGS)
 
 # Generate dependencies in *.d files
 %.d: %.cc
