@@ -10,7 +10,7 @@ c+ nstest.cc -o ns1 && ./ns1
 
 echo
 echo "-- Compiling and running nstime.cc with nameserverdata.txt as input:"
-c+ nstime.cc -o ns2 && ./ns2 nameserverdata.txt
+c+ nstime.cc -o ns2 && ./ns2
 
 rm -f ns1 ns2
 
