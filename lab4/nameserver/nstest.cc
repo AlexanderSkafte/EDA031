@@ -52,5 +52,5 @@ int main() {
 	HNS hns(4711);
 	test(hns);
 	cout << "Hash passed ..." << endl;
-#endif
 }
+

@@ -4,20 +4,20 @@
 
 #include <algorithm>
 #include <functional>
+#include <iostream>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 #include "nameserverinterface.h"
-
-// TODO
-//		Needs to be implemented.
 
 class HNS : public NameServerInterface {
 public:
 
 	HNS(const int size)
+		: size_{size}
 	{
-		this->size = size;
+		data_.reserve(size);
 	}
 
 	/*
@@ -26,7 +26,14 @@ public:
 	 */
 	void insert(const HostName& h, const IPAddress& ip)
 	{
-//		data.insert((std::make_pair(h, ip)));
+		unsigned int index = this->hash(h) % size_;
+		auto& b = data_[index];
+		auto eq = [h](std::pair<HostName, IPAddress> p) { return h == p.first; };
+		const auto& it = find_if(b.begin(), b.end(), eq);
+		if (it != b.end()) {
+			return;
+		}
+		b.push_back(std::make_pair(h, ip));
 	}
 
 	/*
@@ -36,14 +43,15 @@ public:
 	 */
 	bool remove(const HostName& h)
 	{
-//		auto cmp = [h](std::pair<HostName, IPAddress> p) { return h == p.first; };
-//		auto it = std::find_if(data.begin(), data.end(), cmp);
-//		if (it != data.end()) {
-//			data.erase(it);
-//			return true;
-//		} else {
-//			return false;
-//		}
+		unsigned int index = this->hash(h) % size_;
+		auto& b = data_[index];
+		auto eq = [h](std::pair<HostName, IPAddress> p) { return h == p.first; };
+		const auto& it = find_if(b.begin(), b.end(), eq);
+		if (it != b.end()) {
+			b.erase(it);
+			return true;
+		}
+		return false;
 	}
 
 	/*
@@ -53,24 +61,32 @@ public:
 	 */
 	IPAddress lookup(const HostName& h) const
 	{
-//		auto cmp = [h](std::pair<HostName, IPAddress> p) { return h == p.first; };
-//		auto it = std::find_if(data.begin(), data.end(), cmp);
-//		return (it != data.end()) ? it->second : NON_EXISTING_ADDRESS;
+		unsigned int index = this->hash(h) % size_;
+		auto eq = [h](std::pair<HostName, IPAddress> p) { return h == p.first; };
+		const auto& b = data_[index];
+		const auto& it = std::find_if(b.begin(), b.end(), eq);
+		if (it != b.end()) {
+			return it->second;
+		} else {
+			return NON_EXISTING_ADDRESS;
+		}
 	}
 
 private:
-	unsigned int hash(const HostName& h)
+	unsigned int hash(const HostName& h) const
 	{
-//		unsigned int hash = 5381;
-//		int i = 0;
-//		while (str[i] != 0) {
-//			hash = ((hash << 5) + hash) + str[i++];
-//		}
-//		return hash % size;
-	}	
+		unsigned int hash = 5381;
+		int c, i = 0;
 
-	const int size;
-	std::vector<std::vector<std::pair<HostName, IPAddress>>> data;
+		while ((c = h[i++]) != 0) {
+			hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+		}
+
+		return hash;
+	}
+
+	int size_;
+	std::vector<std::vector<std::pair<HostName, IPAddress>>> data_;
 };
 
 #endif
