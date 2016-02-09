@@ -11,31 +11,38 @@ class Dictionary {
 public:
 	Dictionary();
 
-	bool contains(const std::string& word) const;
+	bool contains(
+			const std::string& word)
+		const;
 
 	std::vector<std::string> get_suggestions(
-			const std::string& word) const;
+			const std::string& word)
+		const;
 
 private:
 	void add_trigram_suggestions(
 			std::vector<std::string>& suggestions,
-			const std::string& word) const;
+			const std::string& word)
+		const;
 
 	void rank_suggestions(
 			std::vector<std::string>& suggestions,
-			const std::string& word) const;
+			const std::string& word)
+		const;
 
 	void trim_suggestions(
-			std::vector<std::string>& suggestions) const;
+			std::vector<std::string>& suggestions)
+		const;
 
 	bool contains_at_least_half(
 			const Word& word,
 			const std::vector<std::string>& trigrams_misspelled)
-									const;
+		const;
 
 	unsigned int edit_distance(
 			const std::string& s1,
-			const std::string& s2) const;
+			const std::string& s2)
+		const;
 
 	static const unsigned int MAX_LENGTH = 25;
 	static const unsigned int TRIM_SIZE  = 5;

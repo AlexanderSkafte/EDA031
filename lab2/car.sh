@@ -1,6 +1,8 @@
 #!/bin/bash
 
-alias c+='clang++ -O2 -Wall -Wextra -pedantic-errors -Wold-style-cast -std=c++11 -stdlib=libc++'
+args=("$@")
+
+alias c+='clang++ ${args[0]} ${args[1]} -O2 -Wall -Wextra -pedantic-errors -Wold-style-cast -std=c++11 -stdlib=libc++'
 
 c+ parse.cpp -o parse
 echo "--- Parsing '/usr/share/dict/words' and generating 'words.txt':"

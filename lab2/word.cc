@@ -9,12 +9,12 @@ Word::Word(const string& w, const vector<string>& t)
 	, trigrams_{t}
 { /* intentionally empty */ }
 
+#define CONTAINS(V, X) (find(V.begin(), V.end(), X) != V.end())
+
 // TODO - Make more effictient.
 //			"You may assume that the trigrams in the parameter vector also are
 //			sorted in alphabetical order. Use this fact to write an efficient
 //			implementation of get matches."
-#define CONTAINS(V, X) (find(V.begin(), V.end(), X) != V.end())
-
 unsigned int
 Word::get_matches(const vector<string>& t) const {
 	unsigned int num = 0;

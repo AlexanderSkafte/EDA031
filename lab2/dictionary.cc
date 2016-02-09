@@ -8,8 +8,11 @@
 #include "word.h"
 #include "dictionary.h"
 
-#define DEBUG(X)
-//#define DEBUG(X) do { X; } while (0);
+#if DEBUGGING_ON
+	#define DEBUG(X) do { X; } while (0);
+#else
+	#define DEBUG(X)
+#endif
 
 using namespace std;
 
@@ -34,7 +37,7 @@ Dictionary::Dictionary()
 
 	// Reserve memory for every vector in words to improve push_back speed
 	for (vector<Word> v : words) {
-		v.reserve(15000);
+		v.reserve(15000);	// waste (at least a little, word[0])
 	}
 
 	while (getline(input, line)) {
@@ -120,17 +123,13 @@ Dictionary::add_trigram_suggestions(vector<string>& suggestions,
 	if (wlen < 1) { return; }
 	int starting = (wlen == 1)          ? (wlen) : (wlen - 1);
 	int ending   = (wlen == MAX_LENGTH) ? (wlen) : (wlen + 1);
-	vector<Word> tmp;
+	vector<string> trigrams_misspelled = Word::unique_trigrams(word);
 	for (int i = starting; i <= ending; ++i) {
 		for (Word w : words[i]) {
-			tmp.push_back(Word(w.get_word(), Word::unique_trigrams(w)));
-		}
-	}
-	vector<string> trigrams_misspelled = Word::unique_trigrams(word);
-	for (Word w : tmp) {
-		bool h = contains_at_least_half(w, trigrams_misspelled);
-		if (h) {
-			suggestions.push_back(w.get_word());
+			bool h = contains_at_least_half(w, trigrams_misspelled);
+			if (h) {
+				suggestions.push_back(w.get_word());
+			}
 		}
 	}
 }
@@ -138,16 +137,16 @@ Dictionary::add_trigram_suggestions(vector<string>& suggestions,
 void
 Dictionary::rank_suggestions(vector<string>& suggestions, const string& word) const
 {
-	vector<pair<int, string>> pairs;
+	using Pair = pair<int, string>;
+	vector<Pair> pairs;
 	for (const string& w : suggestions) {
 		unsigned int dist = edit_distance(w, word);
 		pairs.push_back(make_pair(dist, w));
 	}
-	using P = pair<int, string>;
-	auto compare = [](P p1, P p2){ return p1.first < p2.first; };
+	auto compare = [](Pair p1, Pair p2){ return p1.first < p2.first; };
 	sort(pairs.begin(), pairs.end(), compare);
 	suggestions.clear();
-	for (pair<int, string> p : pairs) {
+	for (Pair p : pairs) {
 		DEBUG(
 			cout << "Pushing (" <<  p.first << ") " << p.second << endl;
 		);
@@ -180,7 +179,8 @@ Dictionary::contains_at_least_half(
 unsigned int
 Dictionary::edit_distance(const std::string& s1, const std::string& s2) const
 {
-	const size_t len1 = s1.size(), len2 = s2.size();
+	const size_t len1 = s1.size();
+	const size_t len2 = s2.size();
 	vector<vector<unsigned int>> d(len1 + 1, vector<unsigned int>(len2 + 1));
 	d[0][0] = 0;
 	for (unsigned int i = 1; i <= len1; ++i) { d[i][0] = i; }
