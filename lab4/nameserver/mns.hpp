@@ -28,14 +28,7 @@ public:
 	 */
 	bool remove(const HostName& h)
 	{
-		auto cmp = [h](std::pair<HostName, IPAddress> p) { return h == p.first; };
-		auto it = std::find_if(data.begin(), data.end(), cmp);
-		if (it != data.end()) {
-			data.erase(it);
-			return true;
-		} else {
-			return false;
-		}
+		return data.erase(h);
 	}
 
 	/*
@@ -45,8 +38,7 @@ public:
 	 */
 	IPAddress lookup(const HostName& h) const
 	{
-		auto cmp = [h](std::pair<HostName, IPAddress> p) { return h == p.first; };
-		auto it = std::find_if(data.begin(), data.end(), cmp);
+		auto it = data.find(h);
 		return (it != data.end()) ? it->second : NON_EXISTING_ADDRESS;
 	}
 
