@@ -11,8 +11,8 @@ using namespace std;
 int Date::daysPerMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 Date::Date() {
-	time_t timer = time(0); // time in seconds since 1970-01-01
-	tm* locTime = localtime(&timer); // broken-down time
+	time_t timer = time(0);				// time in seconds since 1970-01-01
+	tm* locTime = localtime(&timer);	// broken-down time
 	year = 1900 + locTime->tm_year;
 	month = 1 + locTime->tm_mon;
 	day = locTime->tm_mday;
@@ -90,12 +90,12 @@ istream& operator>>(istream& is, Date& dt)
 		dt.setDate(year, month, day);
 
 	} catch (const invalid_argument& e) {
-		goto err;
 //		cout << "Invalid argument!" << endl;
+		goto err;
 
 	} catch(const out_of_range& e) {
-		goto err;
 //		cout << "Out of range!" << endl;
+		goto err;
 	}
 
 	return is;

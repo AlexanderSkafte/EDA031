@@ -12,7 +12,7 @@
 
 using namespace std;
 
-TagRemover::TagRemover(std::istream& input)
+TagRemover::TagRemover(istream& input)
 {
 	string line;
 	while (getline(input, line)) {
@@ -25,14 +25,10 @@ TagRemover::TagRemover(std::istream& input)
 }
 
 void
-TagRemover::print(std::ostream& output) const
+TagRemover::print(ostream& output) const
 {
 	DEBUG(cout << REDB "--- Printing parsed HTML:" REDE "\n" << endl);
-	istringstream iss(text_);
-	string line;
-	while (getline(iss, line)) {
-		output << line << endl;
-	}
+	output << text_ << endl;
 	DEBUG(cout << "\n" REDB "--- Print complete." REDE "\n" << endl);
 }
 
