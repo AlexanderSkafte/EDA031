@@ -11,7 +11,7 @@ using namespace std;
 const char PRIME     = 'P';
 const char COMPOSITE = 'C';
 
-void mark(string& s, const unsigned int m)
+inline void mark(string& s, const unsigned int m)
 {
 	s[m] = COMPOSITE;
 }

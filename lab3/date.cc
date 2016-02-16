@@ -61,6 +61,8 @@ void Date::next() {
 	day += 1;
 }
 
+// can be improved
+// >> >> >> >> >>
 istream& operator>>(istream& is, Date& dt)
 {
 	string s, y, m, d;

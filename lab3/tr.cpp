@@ -18,6 +18,7 @@ TagRemover::TagRemover(istream& input)
 	while (getline(input, line)) {
 		html_ += (line + "\n");
 	}
+
 	DEBUG(cout << "\n" REDB "--- Got the following HTML:" REDE "\n\n"
 			<< html_ << endl);
 
@@ -28,31 +29,26 @@ void
 TagRemover::print(ostream& output) const
 {
 	DEBUG(cout << REDB "--- Printing parsed HTML:" REDE "\n" << endl);
-	output << text_ << endl;
+	output << html_ << endl;
 	DEBUG(cout << "\n" REDB "--- Print complete." REDE "\n" << endl);
 }
 
 void
 TagRemover::remove_tags()
 {
-	text_.reserve(html_.length());
-
-	bool write = true;
-	for (char& c : html_) {
-		if (c == '<')           { write = false; }
-		if (write || c == '\n') { text_ += c;    }
-		if (*(&c - 1) == '>')   { write = true;  }
+	size_t beg;
+	while ((beg = html_.find("<")) != string::npos) {
+		size_t end = html_.find(">");
+		html_.erase(beg, end - beg + 1);
 	}
 
 	for (auto& p : entities) {
 		string entity = p.first;
 		string character = p.second;
 		size_t i;
-		while ((i = text_.find(entity)) != string::npos) {
-			text_.replace(i, entity.length(), character);
+		while ((i = html_.find(entity)) != string::npos) {
+			html_.replace(i, entity.length(), character);
 		}
 	}
-
-	text_.shrink_to_fit();
 }
 

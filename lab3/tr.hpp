@@ -12,8 +12,7 @@ public:
 private:
 	void remove_tags();
 
-	std::string html_; // Unparsed html
-	std::string text_; // Parsed html
+	std::string html_;
 
 	std::vector<std::pair<std::string, std::string>> entities = {
 		{"&lt;", "<"},
