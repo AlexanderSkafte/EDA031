@@ -49,3 +49,4 @@ int main() {
 	}
 	cout << "Number of set bits: " << set << endl;
 }
+

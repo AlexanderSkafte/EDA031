@@ -12,7 +12,6 @@ BitReference& BitReference::operator=(bool b) {
 		*p_bits &= ~(1L << pos);
 	}
 	return *this;
-
 }
 
 BitReference& BitReference::operator=(const BitReference& rhs) {
@@ -20,12 +19,14 @@ BitReference& BitReference::operator=(const BitReference& rhs) {
 	// *** IMPLEMENT ***
 	// Same as operator=(bool), but the bit is picked from rhs
 	//
-	Bitset::BitStorage bs = (1L << rhs.pos);
-	if ((bs & rhs.pos) == true) {
-		*p_bits |= bs;
-	} else {
-		*p_bits &= ~bs;
-	}
+//	Bitset::BitStorage bs = (1L << rhs.pos);
+//	if ((bs & rhs.pos) == true) {
+//		*p_bits |= bs;
+//	} else {
+//		*p_bits &= ~bs;
+//	}
+//	return *this;
+	*this = static_cast<bool>(rhs);
 	return *this;
 }
 
