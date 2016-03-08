@@ -1,4 +1,4 @@
 
-lab4:
-	Implement hash table.
+* Nothing! Everything works perfectly! ALthough an algorithm in lab2
+  could be made more efficient.
 
