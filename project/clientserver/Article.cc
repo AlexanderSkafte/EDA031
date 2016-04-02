@@ -2,24 +2,29 @@
 
 #include "Article.h"
 
-Article::Article(int id, std::string author, std::string text) {
-    this->id_ = id;
-    this->author_ = author;
-    this->text_ = text;
-}
+using namespace std;
+
+Article::Article(int id, string author, string text)
+    : id_{id}
+    , author_{author}
+    , text_{text}
+{ }
 
 int
-Article::id() {
-    return this->id_;
+Article::id()
+{
+    return id_;
 }
 
-std::string
-Article::author() {
-    return this->author_;
+string
+Article::author()
+{
+    return author_;
 }
 
-std::string
-Article::text() {
-    return this->text_;
+string
+Article::text()
+{
+    return text_;
 }
 
