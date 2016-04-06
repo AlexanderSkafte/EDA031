@@ -4,6 +4,8 @@
 class MessageHandler {
 public:
 	MessageHandler(Connection& conn);
+	int readCode();
+
 	void sendByte(unsigned char);
 	void sendNbr(int nbr);
 	void sendString(const std::string&); 
@@ -13,7 +15,7 @@ public:
 
 private:
 	std::shared_ptr<Connection)& conn;
-	
+	unsigned char recvByte(); 
 };
 
 #endif 

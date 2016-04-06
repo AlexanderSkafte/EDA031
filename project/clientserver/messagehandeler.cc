@@ -7,7 +7,7 @@ class MessageHandler {
 	MessageHandler(std::shared_ptr<Connection>& conn) : conn(this.conn) {
 	}
 
-	int MessageHandler::readCode() {
+	int MessageHandler::readC	ode() {
 		int code = readByte();
 		return code;
 	}
