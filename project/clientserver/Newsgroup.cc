@@ -22,7 +22,7 @@ Newsgroup::name()
 }
 
 string getArticle(string artName) {
-	auto itr = find_if(articles_.begin, articles_.end, 
+	auto itr = find_if(articles_.begin, articles_.end,
 			[artName](string thisArt) {
 			return thisArt == artName;
 			});
@@ -39,7 +39,7 @@ string getArticle(string artName) {
 
 string getNG() const {
 	string articles;
-	for_each(articles_.begin, articles_.end, 
+	for_each(articles_.begin, articles_.end,
 			[](Article a) {
 			articles += a.title + "\n";
 			});
@@ -61,4 +61,3 @@ string deleteArticle(string artName) {
 void addArticle(Article a) {
 	articles_.push_back(a);
 }
-

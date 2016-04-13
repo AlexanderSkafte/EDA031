@@ -3,11 +3,11 @@
 
 class MessageHandler {
 
-	
+
 	MessageHandler(std::shared_ptr<Connection>& conn) : conn(this.conn) {
 	}
 
-	int MessageHandler::readC	ode() {
+	int MessageHandler::readCode() {
 		int code = readByte();
 		return code;
 	}
@@ -20,8 +20,8 @@ class MessageHandler {
 		}
 	}
 
-	
-	void  MessageHandler::sendNbr(int value) throws ConnectionClosedException {
+
+	void MessageHandler::sendNbr(int value) throws ConnectionClosedException {
 		unsigned char b = (value >> 24);
 		sendByte(b);
 		b = (value >> 16);
@@ -64,7 +64,7 @@ class MessageHandler {
 			//Kolla om det är en string parameter eller något?
 		} else {
 			int n = readInt();
-			for (int i = 0; i<n; i++) {
+			for (int i = 0; i < n; i++) {
 				s += readByte(); //Finns det en stringbuilder i C++?
 			}
 		}
