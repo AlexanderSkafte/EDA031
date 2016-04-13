@@ -40,7 +40,7 @@ getArticle(string sought_article)
 }
 
 string 
-getNewsgroup() const 
+listNewsgroup() const 
 {
 	string articles;
 	for_each(articles_.begin, articles_.end,

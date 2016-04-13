@@ -96,7 +96,7 @@ IMDB::getNewsgroup(string newsgroup_title)
 		return "";
 	} else {
 		Newsgroup thisNG = itr->second;
-		string msg = thisNG.getNewsgroup();
+		string msg = thisNG.listNewsgroup();
 		return msg;
 	}
 }

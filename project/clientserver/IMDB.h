@@ -10,7 +10,8 @@ class IMDB : public DataBase {
 	public:
 		IMDB();
 		~IMDB();
-		void addArticle(std::string newsgroup_title, std::string article_name);
+		void addArticle(std::string newsgroup_title, std::string article_name, 
+				std::string author, std::string text);
 		std::string deleteArticle(std::string newsgroup_title, std::string article_name);
 		std::string addNewsgroup(std::string newsgroup_title);
 		std::string deleteNewsgroup(std::string newsgroup_title);
