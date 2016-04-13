@@ -58,7 +58,7 @@ class MessageHandler {
 	}
 
 	std::string MessageHandler::recvString() {
-		int par = readCode();
+		int par = recvByte();
 		string str = "";
 		if () {
 			//Kolla om det är en string parameter eller något?

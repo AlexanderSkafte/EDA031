@@ -15,7 +15,6 @@ public:
 
 private:
 	std::shared_ptr<Connection)& conn;
-	unsigned char recvByte(); 
 };
 
 #endif 

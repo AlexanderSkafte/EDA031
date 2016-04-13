@@ -14,6 +14,7 @@ public:
 private:
     
     // kanske är bättre med en hashmap?!?
+    std::string resp;
     std::List<Newsgroup> newsgroups;
 };
 
