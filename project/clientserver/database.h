@@ -9,12 +9,12 @@
 class DataBase {
 	public:
 		virtual ~DataBase() {} //destructor for inherited class
-		virtual void addArticle(std::string NG, std::string artName) = 0;
-		virtual void deleteArticle(std::string NG, std::string artName) = 0;
-		virtual void addNG(std::string NG) = 0;
-		virtual void deleteNG(std::string NG) = 0;
-		virtual std::string getArticle(std::string NG, std::string artName) = 0;
-		virtual std::string getNG(std::string NG) = 0; //Lists all arts in NG
+		virtual void addArticle(std::string newsgroup_title, std::string article_name) = 0;
+		virtual void deleteArticle(std::string newsgroup_title, std::string article_name) = 0;
+		virtual void addNewsgroup(std::string newsgroup_title) = 0;
+		virtual void deleteNewsgroup(std::string newsgroup_title) = 0;
+		virtual std::string getArticle(std::string newsgroup_title, std::string article_name) = 0;
+		virtual std::string getNewsgroup(std::string newsgroup_title) = 0; //Lists all arts in NG
 }
 
 #endif

@@ -10,16 +10,16 @@ class IMDB : public DataBase {
 	public:
 		IMDB();
 		~IMDB();
-		void addArticle(std::string NG, std::string artName);
-		std::string deleteArticle(std::string NG, std::string artName);
-		std::string addNG(std::string NG);
-		std::string deleteNG(std::string NG);
-		std::string getArticle(std::string NG, std::string artName);
-		std::string getNG(std::string NG); //Lists all arts in NG
+		void addArticle(std::string newsgroup_title, std::string article_name);
+		std::string deleteArticle(std::string newsgroup_title, std::string article_name);
+		std::string addNewsgroup(std::string newsgroup_title);
+		std::string deleteNewsgroup(std::string newsgroup_title);
+		std::string getArticle(std::string newsgroup_title, std::string article_name);
+		std::string getNewsgroup(std::string newsgroup_title); //Lists all arts in NG
 	private:
 		unordered_map<std::string, Newsgroup> hashmap;
-		int NG_id;
-		int art_id;
+		int newsgroup_id;
+		int article_id;
 
 }
 

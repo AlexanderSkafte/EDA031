@@ -10,9 +10,9 @@ public:
 
     int id();
     std::string name();
-    string getArticle(std::string artName) const;
-    string getNG() const;
-    std::string deleteArticle(std::string artName);
+    string getArticle(std::string sought_article) const;
+    string getNewsgroup() const;
+    std::string deleteArticle(std::string article_name);
     void addArticle(Article a);
 
 private:

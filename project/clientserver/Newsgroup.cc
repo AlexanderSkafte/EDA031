@@ -21,10 +21,12 @@ Newsgroup::name()
     return name_;
 }
 
-string getArticle(string artName) {
+string 
+getArticle(string sought_article) 
+{
 	auto itr = find_if(articles_.begin, articles_.end,
-			[artName](string thisArt) {
-			return thisArt == artName;
+			[sought_article](string current_article) {
+			return current_article == sought_article;
 			});
 	if (itr != articles_.end) {
 		string article = itr->title() + "\n"
@@ -37,7 +39,9 @@ string getArticle(string artName) {
 	}
 }
 
-string getNG() const {
+string 
+getNewsgroup() const 
+{
 	string articles;
 	for_each(articles_.begin, articles_.end,
 			[](Article a) {
@@ -46,10 +50,12 @@ string getNG() const {
 	return articles;
 }
 
-string deleteArticle(string artName) {
+string 
+deleteArticle(string article_name) 
+{
 	auto itr = remove_if(articles_.begin, articles_.end,
-			[artName](Article a) {
-			return artName == a.title;
+			[article_name](Article a) {
+			return article_name == a.title;
 			});
 	if (itr == articles_.end) {
 		return "No article by this name to delete error";
@@ -58,6 +64,10 @@ string deleteArticle(string artName) {
 	return "Deleted article " + artName;
 }
 
-void addArticle(Article a) {
+void 
+addArticle(Article a) 
+{
 	articles_.push_back(a);
 }
+
+

@@ -5,7 +5,7 @@
 
 class Article {
 public:
-    Article(int id, std::string author, std::string text);
+    Article(int id, std::string author, std::string text, std::string title);
     int id();
     std::string title();
     std::string author();
