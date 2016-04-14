@@ -4,8 +4,8 @@
 using namespace std;
 
 inmemory_db::inmemory_db() {
-	NG_id = 0;
-	art_id = 0;
+	Newsgroup_id = 0;
+	article_id = 0;
 }
 
 inmemory_db::~inmemory_db()
@@ -26,7 +26,7 @@ inmemory_db::listNewsgroups()
 
 
 /*Om NG inte finns -> skapa NG. Inga fel ska kunna ske här*/
-int 
+void 
 inmemory_db::addArticle(string newsgroup_title, Article a)
 {
 	auto itr = hashmap.find(newsgroup_title);
@@ -40,7 +40,7 @@ inmemory_db::addArticle(string newsgroup_title, Article a)
 	}
 	//ska man kolla om artiklen redan finns?
 	++newsgroup_id;
-	return Protocol::ERR_ART_DOES_NOT_EXIST;
+	//return Protocol::ERR_ART_DOES_NOT_EXIST;
 }
 
 int 
@@ -98,7 +98,7 @@ inmemory_db::getArticle(string newsgroup_title, string article_name)
 }
 
 vector<Article>
-inmemory_db::getArtcles(string newsgroup_title) 
+inmemory_db::getArticles(string newsgroup_title) 
 {
 	vector<Article> vec;
 	auto itr = hashmap.find(newsgroup_title);
