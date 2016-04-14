@@ -22,6 +22,7 @@ client::listNewsgroups(MessageHandler mh)
     	mh.sendByte(Protocol::ANS_NAK);
     } else {
     	mh.sendByte(Protocol::ANS_ACK);
+    	mh.sendInt(vec.size());
 	    for (unsigned int i = vec.begin(); i != vec.end();  ++i) {
 	    	mh.sendByte(Protocol::PAR_STRING);
 	    	mh.sendString(vec.at(i).first + " ");

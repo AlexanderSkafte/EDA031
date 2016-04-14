@@ -2,7 +2,7 @@
 #define NEWSGROUP_H
 
 #include <string>
-#include "article.h"
+#include "Article.h"
 
 class Newsgroup {
 public:

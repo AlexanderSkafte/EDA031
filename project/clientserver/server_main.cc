@@ -3,7 +3,6 @@
 #include "connectionclosedexception.h"
 #include "protocol.h"
 #include "server.h"
-#include "article.h"
 #include <map>
 #include <memory>
 #include <iostream>
@@ -68,32 +67,31 @@ int main(int argc, char* argv[])
 				switch (ch) {
 
 		        case Protocol::COM_LIST_NG:
-		            listNewsgroups();
+		            db.listNewsgroups();
 		            break;
 
 		        case Protocol::COM_CREATE_NG:
-
-		            createNewsgroup(mh);
+		            db.createNewsgroup(mh);
 		            break;
 
 		        case Protocol::COM_DELETE_NG:
-		            deleteNewsgroup(mh);
+		            db.deleteNewsgroup(mh);
 		            break;
 
 		        case Protocol::COM_LIST_ART:
-		            listArticles(mh);
+		            db.listArticles(mh);
 		            break;
 
 		        case Protocol::COM_GET_ART:
-		            readArticle(mh);
+		            db.readArticle(mh);
 		            break;
 
 		        case Protocol::COM_CREATE_ART:
-		            createArticle(mh);
+		            db.createArticle(mh);
 		            break;
 
 		        case Protocol::COM_DELETE_ART:
-		            deleteArticle(mh);
+		            db.deleteArticle(mh);
 		            break;
 
 		        default:

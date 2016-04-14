@@ -3,7 +3,7 @@
 #include "inmemory_db.h"
 #include "database.h"
 #include "newsgroup.h"
-#include "article.h"
+#include "Article.h"
 
 
 int main()
