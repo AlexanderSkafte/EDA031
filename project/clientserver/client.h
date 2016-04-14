@@ -1,21 +1,19 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include <string>
+class MessageHandler;
 
-#include "newsgroup.h"
-
-public class Client {
+class Client {
 public:
-    void menu();
-    void choise();
-    void listNewsgroup(const std::string name);
-    void createNewsgroup(const std::string name);
+    void listNewsgroups     (MessageHandler mh);
+    void createNewsgroup    (MessageHandler mh);
+    void deleteNewsgroup    (MessageHandler mh);
+    void listArticles       (MessageHandler mh);
+    void createArticle      (MessageHandler mh);
+    void deleteArticle      (MessageHandler mh);
+    void getArticle         (MessageHandler mh);
 private:
-    
-    // kanske är bättre med en hashmap?!?
-    std::string resp;
-    std::List<Newsgroup> newsgroups;
+    // Empty for now
 };
 
 #endif
