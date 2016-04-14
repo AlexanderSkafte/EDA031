@@ -8,9 +8,9 @@ CC  = g++
 # if you use clang++ and wish to use libc++ instead of GNU's libstdc++.
 # -g is for debugging.
 CPPFLAGS =  -std=c++11
-CXXFLAGS =  -O2  
-# -Wall -Wextra -pedantic-errors -Wold-style-cast 
-CXXFLAGS += -std=c++11 
+CXXFLAGS =  -O2
+# -Wall -Wextra -pedantic-errors -Wold-style-cast
+CXXFLAGS += -std=c++11
 CXXFLAGS += -g
 #CPPFLAGS += -stdlib=libc++
 #CXXFLAGS += -stdlib=libc++
@@ -24,7 +24,7 @@ all: $(PROGS)
 
 # Targets rely on implicit rules for compiling and linking
 
-TestDNA: TestDNA.o inmemory_db.o Newsgroup.o Article.o client.o connection.o messagehandler.o server.o server_main.o user.o
+TestDNA: TestDNA.o in_memory_data_base.o newsgroup.o article.o client.o connection.o messagehandler.o server.o server_main.o user.o
 
 # Phony targets
 .PHONY: all clean
@@ -32,5 +32,3 @@ TestDNA: TestDNA.o inmemory_db.o Newsgroup.o Article.o client.o connection.o mes
 # Standard clean
 clean:
 	rm -f *.o
-
-
