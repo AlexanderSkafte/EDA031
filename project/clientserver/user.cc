@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
 			int command = parse_command(line);
 			mh.sendInt(command);
 			switch (command) {
-				
+
 			case Protocol::COM_LIST_NG:
 				list_ng(mh);
 				break;
@@ -91,9 +91,9 @@ void list_ng(MessageHandler mh) {
 		mh.recvByte();
 		cout << "No newsgroups are created yet" << endl;
 	} else if (c == Protocol::ANS_ACK) {
-		unsigned int s = mh.recvInt(); 
+		unsigned int s = mh.recvInt();
 		for (unsigned int i = 0; i<s; ++i) {
-			cout << mh.recvString() << " " << mh.recvInt() << endl; 
+			cout << mh.recvString() << " " << mh.recvInt() << endl;
 		}
 		mh.recvByte();
 	}
@@ -144,7 +144,7 @@ void listArticles(MessageHandler mh) {
 
 	unsigned char resp = mh.recvByte();
 	unsigned int size = mh.recvInt();
-	
+
 	if (resp == Protocol::ANS_NAK) {
 		cout << "Error, either the newsgroup is empty or it does not exist" << endl;
 	} else if (resp == Protocol::ANS_NAK) {
