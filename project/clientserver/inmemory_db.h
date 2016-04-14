@@ -2,8 +2,9 @@
 #define INMEMORY_DB_H
 
 #include <iostream>
-#include "database.h"
 #include <unordered_map>
+#include <vector>
+#include "database.h"
 
 /*In memory database header file*/
 class inmemory_db : public DataBase {
@@ -19,10 +20,10 @@ public:
 	std::vector<Article> getArticles(std::string newsgroup_title); //Lists all arts in NG
 
 private:
-	unordered_map<std::string, Newsgroup> hashmap;
+	std::unordered_map<std::string, Newsgroup> hashmap;
 	int newsgroup_id;
 	int article_id;
-}
+};
 
 #endif
 

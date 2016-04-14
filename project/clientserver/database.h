@@ -2,6 +2,8 @@
 #define DATABASE_H
 
 #include <iostream>
+#include <vector>
+#include <string>
 #include "newsgroup.h"
 #include "Article.h"
 
@@ -9,12 +11,13 @@
 class DataBase {
 	public:
 		virtual ~DataBase() {} //destructor for inherited class
-		virtual void addArticle(std::string newsgroup_title, std::string article_name) = 0;
-		virtual void deleteArticle(std::string newsgroup_title, std::string article_name) = 0;
-		virtual void addNewsgroup(std::string newsgroup_title) = 0;
-		virtual void deleteNewsgroup(std::string newsgroup_title) = 0;
+		virtual void addArticle(std::string newsgroup_title, std::string article_name,
+				std::string author, std::string text) = 0;
+		virtual int deleteArticle(std::string newsgroup_title, std::string article_name) = 0;
+		virtual int addNewsgroup(std::string newsgroup_title) = 0;
+		virtual int deleteNewsgroup(std::string newsgroup_title) = 0;
 		virtual std::string getArticle(std::string newsgroup_title, std::string article_name) = 0;
-		virtual std::string getNewsgroup(std::string newsgroup_title) = 0; //Lists all arts in NG
-}
+		virtual std::vector<Article> getArticles(std::string newsgroup_title) = 0; //Lists all arts in NG
+};
 
 #endif

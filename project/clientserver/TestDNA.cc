@@ -5,6 +5,7 @@
 #include "newsgroup.h"
 #include "Article.h"
 
+using namespace std;
 
 int main()
 {
@@ -37,23 +38,23 @@ int main()
 
 	//Test IMDB class
 	cout << "3. Test IMDB class:" << endl;
-	inmemory_db imdb();
+	inmemory_db imdb;
 	cout << "Testing addArticle..." << endl;
 	imdb.addArticle("Newsgroup", "Article name", "Author 3", "Text 3");
 	cout << "addArticle successful!" << endl;
 	cout << "Testing addNewsgroup..." << endl;
-	imdb.addNewsgroup("addNewsgroup test") << endl;
+	imdb.addNewsgroup("addNewsgroup test");
 	cout << "addNewsgroup was successful!" << endl;
 	cout << "Testing getNewsgroup: " << endl;
-	cout << "1. " << imdb.getNewsgroup("addNewsgroup test") << endl;
-	cout << "2. " << imdb.getNewsgroup("Newsgroup") << endl;
+	//cout << "1. " << imdb.getArticles("addNewsgroup test") << endl;
+	//cout << "2. " << imdb.getArticles("Newsgroup") << endl;
 	cout << endl;
 	cout << "Testing getArticle: " << imdb.getArticle("Newsgroup", "Article name") << endl;
 	cout << "Testing deleteNewsgroup..." << endl;
 	imdb.deleteNewsgroup("addNewsgroup test");
 	cout << "Deletion successful!" << endl;
 	cout << "Testing deleteArticle..." << endl;
-	imdb.deleteArticle("Newsgroup", "Article name") << endl;
+	imdb.deleteArticle("Newsgroup", "Article name");
 	cout << "Deletion successful!" << endl;
 }
 
