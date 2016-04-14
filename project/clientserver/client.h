@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "Newsgroup.h"
+#include "newsgroup.h"
 
 public class Client {
 public:

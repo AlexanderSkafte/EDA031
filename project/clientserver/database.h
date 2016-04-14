@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "newsgroup.h"
-#include "Article.h"
+#include "article.h"
 
 /*An interface for the Database classes*/
 class DataBase {

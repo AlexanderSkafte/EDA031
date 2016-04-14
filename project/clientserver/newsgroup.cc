@@ -1,4 +1,4 @@
-
+#include "newsgroup.h"
 #include <string>
 #include <algorithm>
 

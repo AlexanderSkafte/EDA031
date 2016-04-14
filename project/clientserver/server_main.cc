@@ -3,6 +3,7 @@
 #include "connectionclosedexception.h"
 #include "protocol.h"
 #include "server.h"
+#include "article.h"
 #include <map>
 #include <memory>
 #include <iostream>

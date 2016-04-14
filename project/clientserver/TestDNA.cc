@@ -1,9 +1,9 @@
 
 #include <iostream>
-#include "IMDB.h"
+#include "inmemory_db.h"
 #include "database.h"
 #include "newsgroup.h"
-#include "Article.h"
+#include "article.h"
 
 
 int main() {
