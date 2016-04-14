@@ -8,13 +8,15 @@ class MessageHandler;
 class Adapter {
 public:
     Adapter                 ();
-    void listNewsgroups     (MessageHandler mh);
-    void createNewsgroup    (MessageHandler mh);
-    void deleteNewsgroup    (MessageHandler mh);
-    void listArticles       (MessageHandler mh);
-    void writeArticle       (MessageHandler mh);
-    void deleteArticle      (MessageHandler mh);
-//    void getArticle         (MessageHandler mh);
+    void listNewsgroups     (MessageHandler& mh);
+    void createNewsgroup    (MessageHandler& mh);
+    void deleteNewsgroup    (MessageHandler& mh);
+    void listArticles       (MessageHandler& mh);
+    void createArticle      (MessageHandler& mh);
+    void deleteArticle      (MessageHandler& mh);
+    void getArticle         (MessageHandler& mh);
 private:
     InMemoryDataBase        db;
+};
+
 #endif

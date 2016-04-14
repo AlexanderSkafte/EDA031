@@ -1,7 +1,6 @@
 #ifndef NEWSGROUP_H
 #define NEWSGROUP_H
 
-#include <iostream>
 #include <string>
 #include <list>
 
@@ -9,14 +8,14 @@ class Article;
 
 class Newsgroup {
 public:
-    Newsgroup(int id, std::string name);
+    Newsgroup                       (int id, const std::string& name);
 
-    int         id              ();
-    std::string name            ();
-    std::string getArticle      (std::string sought_article) const;
-    std::string listNewsgroup   () const;
-    std::string deleteArticle   (std::string article_name);
-    void        addArticle      (Article a);
+    int             id              () const;
+    std::string     name            () const;
+    map<Article>    articles        () const;
+    void            createArticle   (const Article& a);
+    std::string     deleteArticle   (const std::string& title);
+    std::string     getArticle      (const std::string& title) const;
 
 private:
     std::string name_;

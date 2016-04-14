@@ -1,4 +1,3 @@
-
 #include <string>
 #include <algorithm>
 
@@ -10,57 +9,55 @@ Newsgroup(int id, string name)
 { }
 
 int
-Newsgroup::id()
+Newsgroup::id() const
 {
     return id_;
 }
 
 string
-Newsgroup::name()
+Newsgroup::name() const
 {
     return name_;
 }
 
-string
-Newsgroup::getArticle(string sought_article)
-{
-	auto itr = find_if(articles_.begin, articles_.end,
-			[sought_article](string current_article) {
-			return current_article == sought_article;
-			});
-	if (itr != articles_.end) {
-		string article = itr->title() + "\n"
-			+ itr->author() + "\n"
-			+ itr->text + "\n";
-		return article;
-	} else {
-		//Probably faulty logic, fix this case
-		return nullptr;
-	}
-}
-
 vector<Article>
-Newsgroup::listNewsgroup() const
+Newsgroup::articles() const
 {
 	return articles_;
 }
 
-string
-Newsgroup::deleteArticle(string article_name)
-{
-	auto itr = remove_if(articles_.begin, articles_.end,
-			[article_name](Article a) {
-			return article_name == a.title;
-			});
-	if (itr == articles_.end) {
-		return "No article by this name to delete error";
-	}
-	articles_.erase(itr, articles_.end);
-	return "Deleted article " + artName;
-}
-
 void
-Newsgroup::addArticle(Article a)
+Newsgroup::createArticle(const Article& a)
 {
 	articles_.push_back(a);
+}
+
+string
+Newsgroup::deleteArticle(const string& title)
+{
+	auto itr = remove_if(articles_.begin(), articles_.end(),
+		[&title](const Article& a) {
+			return title == a.title();
+		});
+	if (itr != articles_.end()) {
+		articles_.erase(itr, articles_.end());
+		return "Deleted article '" + artName + "'.";
+	} else {
+		return "No article by this name to delete error";
+	}
+}
+
+string
+Newsgroup::getArticle(const string& title) const
+{
+	auto itr = find_if(articles_.begin(), articles_.end(),
+		[&title](const Article& a) {
+			return title == a.title();
+		});
+	if (itr != articles_.end()) {
+        return itr->title() + "\n" + itr->author() + "\n" + itr->text() + "\n";
+	} else {
+		//Probably faulty logic, fix this case
+		return nullptr;
+	}
 }

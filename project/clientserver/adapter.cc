@@ -13,7 +13,7 @@ Adapter::Adapter()
 { }
 
 void
-Adapter::listNewsgroups(MessageHandler mh)
+Adapter::listNewsgroups(MessageHandler& mh)
 {
     vector<pair<string, unsigned int>> vec = db.listNewsgroups();
     if (vec.empty()) {
@@ -33,7 +33,7 @@ Adapter::listNewsgroups(MessageHandler mh)
 }
 
 void
-Adapter::createNewsgroup(MessageHandler mh)
+Adapter::createNewsgroup(MessageHandler& mh)
 {
 	string newsgroup_name = mh.recvString();
 	unsigned char resp = db.deleteNewsgroup(newsgroup_name);
@@ -50,11 +50,11 @@ Adapter::createNewsgroup(MessageHandler mh)
 }
 
 void
-Adapter::deleteNewsgroup(MessageHandler mh)
+Adapter::deleteNewsgroup(MessageHandler& mh)
 {
 
     string newsgroup_name = mh.recvString();
-	unsigned char resp = db.addArticle(id_nbr, a);
+	unsigned char resp = db.createArticle(id_nbr, a);  // TODO(Alexander -> Mattias) fix pls
 
 	if (resp == Protocol::ERR_NG_DOES_NOT_EXIST) {
 		mh.sendByte(Protocol::ANS_NAK);
@@ -68,72 +68,73 @@ Adapter::deleteNewsgroup(MessageHandler mh)
 }
 
 void
-Adapter::listArticles(MessageHandler mh){
-    string news_n = mh.recvString();
+Adapter::listArticles(MessageHandler& mh){
+	string newsgroup = mh.recvString();
 
-    Vector<Article> vec = db.getArticles(news_n);
-    if (vec.empty()) {
-    	mh.sendByte(Protocol::ANS_NAK);
-    } else {
-    	mh.sendByte(Protocol::ANS_ACK);
-	    for (unsigned int i = vec.begin(); i<veg.end(); i++) {
-	    	mh.sendByte(Protocol::PAR_STRING);
-	    	mh.sendString(vec.at(i).title() + "\n");
-	    }
+	Vector<Article> vec = db.getArticles(newsgroup);
+	if (vec.empty()) {
+		mh.sendByte(Protocol::ANS_NAK);
+	} else {
+		mh.sendByte(Protocol::ANS_ACK);
+		for (unsigned int i = vec.begin(); i<veg.end(); i++) {
+			mh.sendByte(Protocol::PAR_STRING);
+			mh.sendString(vec.at(i).title() + "\n");
+		}
 	}
-    mh.sendByte(Protocol::ANS_END);
 
+	mh.sendByte(Protocol::ANS_END);
 }
 
 void
-Adapter::createArticle(MessageHandler mh)
+Adapter::createArticle(MessageHandler& mh)
 {
-	string news_n = mh.recvString();
-	string title = recvString();
-	string aut = recvString();
-	string text = recvString();
-	Article a = new Article(aut, text, title);
+	string newsgroup = mh.recvString();
+	string title     = mh.recvString();
+	string author    = mh.recvString();
+	string text      = mh.recvString();
+	Article a = new Article(author, text, title);
 
-	unsigned char resp = db.addArticle(news_n, a);
+	unsigned char resp = db.createArticle(newsgroup, a);
 
 	if (resp == Protocol::ERR_ART_DOES_NOT_EXIST) {
 		mh.sendByte(Protocol::ANS_ACK);
 	} else {
-        cout << "Borde inte komma hit" << endl;
+		cout << "Borde inte komma hit!" << endl;
 	}
 
-    mh.sendByte(Protocol::ANS_END);
+	mh.sendByte(Protocol::ANS_END);
 }
 
 void
-Adapter::deleteArticle(MessageHandler mh) {
-	string news_n = mh.recvString();
-	string art_n = mh.recvString();
+Adapter::deleteArticle(MessageHandler& mh) {
+	string newsgroup = mh.recvString();
+	string article   = mh.recvString();
 
-	unsigned char resp = db.deleteArticle(news_n, art_n);
+	unsigned char resp = db.deleteArticle(newsgroup, article);
 	if (resp == Protocol::ERR_ART_DOES_NOT_EXIST) {
 		mh.sendByte(Protocol::ANS_NAK);
 	} else if (resp == Protocol::ANS_ACK) {
 		mh.sendByte(resp);
 	} else {
-
+        cout << "Borde inte komma hit!" << endl;
 	}
 	mh.sendByte(Protocol::ANS_END);
 }
 
 void
-Adapter::getArticle(MessageHandler mh)
+Adapter::getArticle(MessageHandler& mh)
 {
-   string news_n = mh.recvString();
-   string art_n = mh.recvString();
+	string newsgroup = mh.recvString();
+	string article = mh.recvString();
 
-   string result = db.getArticle(news_n, art_n);
-   if (result.compare("") == 0) {
-   		mh.sendByte(ANS_NAK);
-   } else {
-   		mh.sendByte(ANS_ACK);
-   		mh.sendByte(Protocol::PAR_STRING);
-   		mh.sendString(result);
-   }
-   mh.sendByte(ANS_END);
+	string result = db.getArticle(newsgroup, article);
+	if (result.compare("") == 0) {
+		mh.sendByte(ANS_NAK);
+	} else {
+		mh.sendByte(ANS_ACK);
+		mh.sendByte(Protocol::PAR_STRING);
+		mh.sendString(result);
+	}
+
+	mh.sendByte(ANS_END);
 }
