@@ -124,4 +124,4 @@ client::getArticle(MessageHandler mh)
    		mh.sendString(result);
    }
    mh.sendByte(ANS_END);
-}
+   
