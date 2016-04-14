@@ -60,47 +60,53 @@ int main(int argc, char* argv[])
 	while (true) {
 		auto conn = server.waitForActivity();
 		if (conn != nullptr) {
-			unsigned char ch = conn->read();
-			MessageHandler mh(conn);
+			try {
+				unsigned char ch = conn->read();
+				MessageHandler mh(conn);
 
-			switch (ch) {
+				switch (ch) {
 
-	        case Protocol::COM_LIST_NG:
-	            listNewsgroups();
-	            break;
+		        case Protocol::COM_LIST_NG:
+		            listNewsgroups();
+		            break;
 
-	        case Protocol::COM_CREATE_NG:
-	            cout << "Enter name of new newsgroup:" << endl;
-	            cin >> name;
-	            createNewsgroup(conn);
-	            break;
+		        case Protocol::COM_CREATE_NG:
 
-	        case Protocol::COM_DELETE_NG:
-	            cout << "Enter name of newsgroup you want to delete:" << endl;
-	            deleteNewsgroup(conn);
-	            break;
+		            createNewsgroup(mh);
+		            break;
 
-	        case Protocol::COM_LIST_ART:
-	            listArticles();
-	            break;
+		        case Protocol::COM_DELETE_NG:
+		            deleteNewsgroup(mh);
+		            break;
 
-	        case Protocol::COM_GET_ART:
-	            readArticle();
-	            break;
+		        case Protocol::COM_LIST_ART:
+		            listArticles(mh);
+		            break;
 
-	        case Protocol::COM_CREATE_ART:
-	            cout << "Enter name of new article:" << endl;
-	            createArticle();
-	            break;
+		        case Protocol::COM_GET_ART:
+		            readArticle(mh);
+		            break;
 
-	        case Protocol::COM_DELETE_ART:
-	            deleteArticle();
-	            break;
+		        case Protocol::COM_CREATE_ART:
+		            createArticle(mh);
+		            break;
 
-	        default:
-	            cerror << "Choice does not exist." << endl;
-	            exit(1);
-	        }
+		        case Protocol::COM_DELETE_ART:
+		            deleteArticle(mh);
+		            break;
+
+		        default:
+		            cerror << "Choice does not exist." << endl;
+		            exit(1);
+		        }
+	    	} catch (connectionclosedexception&) {
+	    		server.deregisterConnection(conn);
+	    		cout << "closed client connection"<< endl;
+	    	}
+        } else {
+        	conn = make_shared<Connection>();
+        	server.registerConnection(conn);
+        	cout << "Opened connection with a new client" << endl;
         }
 	}
 }
