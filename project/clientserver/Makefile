@@ -24,15 +24,7 @@ all: $(PROGS)
 
 # Targets rely on implicit rules for compiling and linking
 
-TestDNA: TestDNA.o inmemory_db.o Newsgroup.o Article.o
-
-TestDNA.o: TestDNA.cc
-
-inmemory_db.o: inmemory_db.cc inmemory_db.h database.h protocol.h
-
-Newsgroup.o: Newsgroup.cc newsgroup.h
-
-Article.o: Article.cc Article.h
+TestDNA: TestDNA.o inmemory_db.o Newsgroup.o Article.o client.o connection.o messagehandler.o server.o server_main.o user.o
 
 # Phony targets
 .PHONY: all clean
