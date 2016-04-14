@@ -8,14 +8,16 @@ inmemory_db::inmemory_db() {
 	art_id = 0;
 }
 
-inmemory_db::~inmemory_db() {
+inmemory_db::~inmemory_db()
+{
 	delete hashmap;
-
 }
+
 vector<pair<string, unsigned int>> 
-inmemory_db::listNewsgroups()) {
+inmemory_db::listNewsgroups()
+{
 	vector<pair<string, unsigned int>> vec;
-    for(auto ng: hashmap){
+    for (const auto& ng : hashmap) {
         vec.push_back(make_pair(ng.second.name(), ng.second.id()));
     }
     return vec;
@@ -27,8 +29,6 @@ inmemory_db::listNewsgroups()) {
 int 
 inmemory_db::addArticle(string newsgroup_title, Article a)
 {
-	
-
 	auto itr = hashmap.find(newsgroup_title);
 	if (itr == hashmap.end()) {
 		Newsgroup newNG(newsgroup_id, newsgroup_title);
@@ -47,7 +47,6 @@ int
 inmemory_db::deleteArticle(string newsgroup_title, string article_name) 
 {
 	auto itr = hashmap.find(newsgroup_title);
-
 	if (itr == hashmap.end) {
 		//return error msg in protocol
 		return "";
@@ -88,7 +87,6 @@ string
 inmemory_db::getArticle(string newsgroup_title, string article_name) 
 {
 	auto itr = hashmap.find(newsgroup_title);
-
 	if (itr == hashmap.end) {
 		//return error msg in protocol
 		return "";
@@ -104,7 +102,6 @@ inmemory_db::getArtcles(string newsgroup_title)
 {
 	vector<Article> vec;
 	auto itr = hashmap.find(newsgroup_title);
-
 	if (itr == hashmap.end) {
 		//return error msg in protocol
 		return vec;
@@ -113,5 +110,4 @@ inmemory_db::getArtcles(string newsgroup_title)
 		return vec;
 	}
 }
-
 
