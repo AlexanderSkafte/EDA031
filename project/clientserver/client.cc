@@ -1,4 +1,4 @@
-#include <stdio>
+#include <iostream>
 
 #include "client.h"
 #include "connection.h"
@@ -9,7 +9,8 @@
 using namespace protocol;
 using namespace std;
 
-client::client() {
+client::client()
+{
 	inmemorydb db = new inmemorydb();
 }
 
@@ -43,7 +44,7 @@ client::createNewsgroup(MessageHandler mh)
 	} else if (resp == Protocol::ERR_NG_ALREADY_EXISTS) {
 		mh.sendByte(Protocol::ANS_NAK);
 	} else {
-		printf("exception kanske?");
+        cout << "Exception kanske?" << endl;
 	}
 
     mh.sendByte(Protocol::ANS_END);
@@ -61,7 +62,7 @@ client::deleteNewsgroup(MessageHandler mh)
 	} else if (resp == Protocol::ANS_ACK) {
 		mh.sendByte(Protocol::ANS_ACK);
 	} else {
-		printf("exception kanske?");
+        cout << "Exception kanske?" << endl;
 	}
 
     mh.sendByte(Protocol::ANS_END);
@@ -81,7 +82,7 @@ client::writeArticle(MessageHandler mh)
 	if (resp == Protocol::ERR_ART_DOES_NOT_EXIST) {
 		mh.sendByte(Protocol::ANS_ACK);
 	} else {
-		printf("borde inte komma hit");
+        cout << "Borde inte komma hit" << endl;
 	}
 
     mh.sendByte(Protocol::ANS_END);

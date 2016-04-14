@@ -1,12 +1,13 @@
 
 #include <iostream>
-#include "IMDB.h"
+#include "inmemory_db.h"
 #include "database.h"
 #include "newsgroup.h"
 #include "Article.h"
 
 
-int main() {
+int main()
+{
 	//Test article class
 	cout << "1. Test Article class: " << endl;
 	Article a1(1, "Author", "Text", "Title");
@@ -16,7 +17,7 @@ int main() {
 	cout << "Text: " << a1.text() << endl;
 	cout << "Test successful! On to test 2..." << endl;
 	cout << endl;
-	
+
 	//Test Newsgroup class
 	cout << "2. Test Newsgroup class: " << endl;
 	Newsgroup newsgroup(0, "Newsgroup");
@@ -36,7 +37,7 @@ int main() {
 
 	//Test IMDB class
 	cout << "3. Test IMDB class:" << endl;
-	IMDB imdb();
+	inmemory_db imdb();
 	cout << "Testing addArticle..." << endl;
 	imdb.addArticle("Newsgroup", "Article name", "Author 3", "Text 3");
 	cout << "addArticle successful!" << endl;
@@ -54,5 +55,5 @@ int main() {
 	cout << "Testing deleteArticle..." << endl;
 	imdb.deleteArticle("Newsgroup", "Article name") << endl;
 	cout << "Deletion successful!" << endl;
-
 }
+
