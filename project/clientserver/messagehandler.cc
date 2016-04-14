@@ -8,7 +8,7 @@ void
 MessageHandler::sendByte(unsigned char b) // throws ConnectionClosedException
 {
 	try {
-		conn->write(b);
+		conn_->write(b);
 	} catch (exception& e) {
 		throw ConnectionClosedException();
 	}
@@ -50,7 +50,7 @@ MessageHandler::recvInt() throws ConnectionClosedException
 int
 MessageHandler::recvByte() // throws ConnectionClosedException
 {
-	int code = conn.read();
+	int code = conn_.read();
 	if (code == Connection.CONNECTION_CLOSED) {
 		throw new ConnectionClosedException();
 	}
