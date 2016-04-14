@@ -13,14 +13,21 @@ client::client() {
 	inmemorydb db = new inmemorydb();
 }
 
-vector<pair<string, unsigned int>> 
-client::listNewsgroups()
+void
+client::listNewsgroups(MessageHandler mh)
 {
-    vector<pair<string, unsigned int>> vec;
-    for(auto ng: newsgroups){
-        vec.push_back(make_pair(ng.getId(), ng.name()));
-    }
-    return vec;
+    vector<pair<string, unsigned int>> vec = db.listNewsgroups();
+    if (vec.empty()) {
+    	mh.sendByte(Protocol::ANS_NAK);
+    } else {
+    	mh.sendByte();
+	    for (unsigned int i = vec.begin(); i != vec.end();  ++i) {
+	    	mh.sendString(vec.at(i).first + " ");
+	    	mh.sendInt(vec.at(i).second));
+			mh.sendString("\n");
+	    }
+	}
+    mh.sendByte(Protocol::ANS_END);
 }
 
 void 
@@ -82,12 +89,33 @@ client::writeArticle(MessageHandler mh)
 void
 client::listArticles(MessageHandler mh){
     string news_n = mh.recvString();
+
+    Vector<Article> vec = db.getArticles(news_n);
+    if (vec.empty()) {
+    	mh.sendByte(Protocol::ANS_NAK);
+    } else {
+    	mh.sendByte(Protocol::ANS_ACK);
+	    for (unsigned int i = vec.begin(); i<veg.end(); i++) {
+	    	mh.sendString(vec.at(i).title() + "\n");
+	    }
+	}
+    mh.sendByte(Protocol::ANS_END);
+
 }
 
 void 
-readArticle(string name)
+getArticle(MessageHandler mh)
 {
-    // liknande funktionen ovan
+   string news_n = mh.recvString();
+   string art_n = mh.recvString();
+
+   string result = db.getArticle(news_n, art_n);
+   if (result.compare("") == 0) {
+   		mh.sendByte(ANS_NAK);		
+   } else {
+   		mh.sendByte(ANS_ACK);
+   		mh.sendString(result);
+   }
+   mh.sendByte(ANS_END);
 }
 
-void writeArticle(

@@ -11,7 +11,7 @@ public:
 	void sendString(const std::string&); 
 	int recvInt(); 
 	int recvByte(); 
-	std::string recvString(int n);
+	std::string recvString();
 
 private:
 	std::shared_ptr<Connection)& conn;

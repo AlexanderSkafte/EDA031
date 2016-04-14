@@ -1,19 +1,19 @@
 #include<iostream>
-#include "IMDB.h"
+#include "inmemory_db.h"
 
 using namespace std;
 
-IMDB::IMDB() {
+inmemory_db::inmemory_db() {
 	NG_id = 0;
 	art_id = 0;
 }
 
-IMDB::~IMDB() {
+inmemory_db::~inmemory_db() {
 	delete hashmap;
 
 }
 vector<pair<string, unsigned int>> 
-IMDB::listNewsgroups()) {
+inmemory_db::listNewsgroups()) {
 	vector<pair<string, unsigned int>> vec;
     for(auto ng: newsgroups){
         vec.push_back(make_pair(ng.name(), ng.id()));
@@ -25,7 +25,7 @@ IMDB::listNewsgroups()) {
 
 /*Om NG inte finns -> skapa NG. Inga fel ska kunna ske här*/
 int 
-IMDB::addArticle(string newsgroup_title, Article a); 
+inmemory_db::addArticle(string newsgroup_title, Article a); 
 {
 	
 
@@ -44,7 +44,7 @@ IMDB::addArticle(string newsgroup_title, Article a);
 }
 
 int 
-IMDB::deleteArticle(string newsgroup_title, string article_name) 
+inmemory_db::deleteArticle(string newsgroup_title, string article_name) 
 {
 	auto itr = hashmap.find(newsgroup_title);
 
@@ -58,7 +58,7 @@ IMDB::deleteArticle(string newsgroup_title, string article_name)
 }
 
 int 
-IMDB::addNewsgroup(string newsgroup_title) 
+inmemory_db::addNewsgroup(string newsgroup_title) 
 {
 	if (hashmap.find(newsgroup_title) != hashmap.end) {
 		//return error msg in protocol
@@ -72,7 +72,7 @@ IMDB::addNewsgroup(string newsgroup_title)
 }
 
 int 
-IMDB::deleteNewsgroup(string newsgroup_title) 
+inmemory_db::deleteNewsgroup(string newsgroup_title) 
 {
 	auto itr = hashmap.find(newsgroup_title);
 	if (itr == hashmap.end) {
@@ -85,7 +85,7 @@ IMDB::deleteNewsgroup(string newsgroup_title)
 }
 
 string 
-IMDB::getArticle(string newsgroup_title, string article_name) 
+inmemory_db::getArticle(string newsgroup_title, string article_name) 
 {
 	auto itr = hashmap.find(newsgroup_title);
 
@@ -100,7 +100,7 @@ IMDB::getArticle(string newsgroup_title, string article_name)
 }
 
 vector<Article>
-IMDB::getArtcles(string newsgroup_title) 
+inmemory_db::getArtcles(string newsgroup_title) 
 {
 	vector<Article> vec;
 	auto itr = hashmap.find(newsgroup_title);

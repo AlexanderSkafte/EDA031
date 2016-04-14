@@ -7,10 +7,6 @@ class MessageHandler {
 	MessageHandler(std::shared_ptr<Connection>& conn) : conn(this.conn) {
 	}
 
-	int MessageHandler::readCode() {
-		int code = readByte();
-		return code;
-	}
 
 	void MessageHandler::sendByte(unsigned char b) throws ConnectionClosedException {
 		try {
@@ -32,8 +28,7 @@ class MessageHandler {
 	}
 
 	void sendString(const String& str) {
-		//KOlla rätt protocol, char c = protocol.något
-		sendByte(c);
+		sendByte(Protocol::PAR_STRING);
 		sendInt(str.size());
 		for (unsigned int i = 0; i<str.size(); i++) {
 			sendByte(s[i]);
@@ -60,12 +55,14 @@ class MessageHandler {
 	std::string MessageHandler::recvString() {
 		int par = recvByte();
 		string str = "";
-		if () {
-			//Kolla om det är en string parameter eller något?
+		if (par != Protocol::PAR_STRING) {
+			prinf("Wrong format, not string. exiting");
+			exit(1);
+
 		} else {
-			int n = readInt();
+			int n = recvInt();
 			for (int i = 0; i < n; i++) {
-				s += readByte(); //Finns det en stringbuilder i C++?
+				s += recvByte(); //Finns det en stringbuilder i C++?
 			}
 		}
 		return s;
