@@ -11,7 +11,8 @@ using namespace std;
 
 client::client()
 {
-	inmemorydb db = new inmemorydb();
+	inmemorydb db = new inmemorydb(); // does not work, db is local
+	// how should the constructor be?
 }
 
 void
@@ -34,7 +35,7 @@ client::listNewsgroups(MessageHandler mh)
     mh.sendByte(Protocol::ANS_END);
 }
 
-void 
+void
 client::createNewsgroup(MessageHandler mh)
 {
 	string newsgroup_name = mh.recvString();
@@ -51,10 +52,10 @@ client::createNewsgroup(MessageHandler mh)
     mh.sendByte(Protocol::ANS_END);
 }
 
-void 
+void
 client::deleteNewsgroup(MessageHandler mh)
 {
-	
+
     string newsgroup_name = mh.recvString();
 	unsigned char resp = db.addArticle(id_nbr, a);
 
@@ -69,7 +70,7 @@ client::deleteNewsgroup(MessageHandler mh)
     mh.sendByte(Protocol::ANS_END);
 }
 
-void 
+void
 client::writeArticle(MessageHandler mh)
 {
 	string news_n = mh.recvString();
@@ -108,15 +109,15 @@ client::listArticles(MessageHandler mh){
 
 }
 
-void 
-getArticle(MessageHandler mh)
+void
+client::getArticle(MessageHandler mh)
 {
    string news_n = mh.recvString();
    string art_n = mh.recvString();
 
    string result = db.getArticle(news_n, art_n);
    if (result.compare("") == 0) {
-   		mh.sendByte(ANS_NAK);		
+   		mh.sendByte(ANS_NAK);
    } else {
    		mh.sendByte(ANS_ACK);
    		mh.sendByte(Protocol::PAR_STRING);
@@ -124,4 +125,3 @@ getArticle(MessageHandler mh)
    }
    mh.sendByte(ANS_END);
 }
-

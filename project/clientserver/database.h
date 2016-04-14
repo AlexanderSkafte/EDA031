@@ -4,8 +4,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "article.h"
 #include "newsgroup.h"
-#include "Article.h"
 
 /*An interface for the Database classes*/
 class DataBase {

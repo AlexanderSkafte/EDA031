@@ -21,8 +21,8 @@ Newsgroup::name()
     return name_;
 }
 
-string 
-Newsgroup::getArticle(string sought_article) 
+string
+Newsgroup::getArticle(string sought_article)
 {
 	auto itr = find_if(articles_.begin, articles_.end,
 			[sought_article](string current_article) {
@@ -39,14 +39,14 @@ Newsgroup::getArticle(string sought_article)
 	}
 }
 
-vector<Article> 
-Newsgroup::listNewsgroup() const 
+vector<Article>
+Newsgroup::listNewsgroup() const
 {
 	return articles_;
 }
 
-string 
-Newsgroup::deleteArticle(string article_name) 
+string
+Newsgroup::deleteArticle(string article_name)
 {
 	auto itr = remove_if(articles_.begin, articles_.end,
 			[article_name](Article a) {
@@ -59,10 +59,8 @@ Newsgroup::deleteArticle(string article_name)
 	return "Deleted article " + artName;
 }
 
-void 
-Newsgroup::addArticle(Article a) 
+void
+Newsgroup::addArticle(Article a)
 {
 	articles_.push_back(a);
 }
-
-

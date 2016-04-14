@@ -1,20 +1,21 @@
-#include<iostream>
-#include "inmemory_db.h"
+#include <iostream>
+#include "in_memory_data_base.h"
 
 using namespace std;
 
-inmemory_db::inmemory_db() {
-	Newsgroup_id = 0;
-	article_id = 0;
-}
+InMemoryDataBase::InMemoryDataBase()
+	: newsgroup_id{0}
+	, article_id{0}
+{ }
 
-inmemory_db::~inmemory_db()
+InMemoryDataBase::~InMemoryDataBase()
 {
-	delete hashmap;
+	// delete hashmap;  // Hashmap is not a heap allocated object
+						// Since it is just declared as a private member
 }
 
-vector<pair<string, unsigned int>> 
-inmemory_db::listNewsgroups()
+vector<pair<string, unsigned int>>
+InMemoryDataBase::listNewsgroups()
 {
 	vector<pair<string, unsigned int>> vec;
     for (const auto& ng : hashmap) {
@@ -23,11 +24,9 @@ inmemory_db::listNewsgroups()
     return vec;
 }
 
-
-
 /*Om NG inte finns -> skapa NG. Inga fel ska kunna ske här*/
-void 
-inmemory_db::addArticle(string newsgroup_title, Article a)
+void
+InMemoryDataBase::addArticle(string newsgroup_title, Article a)
 {
 	auto itr = hashmap.find(newsgroup_title);
 	if (itr == hashmap.end()) {
@@ -43,8 +42,8 @@ inmemory_db::addArticle(string newsgroup_title, Article a)
 	//return Protocol::ERR_ART_DOES_NOT_EXIST;
 }
 
-int 
-inmemory_db::deleteArticle(string newsgroup_title, string article_name) 
+int
+InMemoryDataBase::deleteArticle(string newsgroup_title, string article_name)
 {
 	auto itr = hashmap.find(newsgroup_title);
 	if (itr == hashmap.end) {
@@ -56,8 +55,8 @@ inmemory_db::deleteArticle(string newsgroup_title, string article_name)
 	}
 }
 
-int 
-inmemory_db::addNewsgroup(string newsgroup_title) 
+int
+InMemoryDataBase::addNewsgroup(string newsgroup_title)
 {
 	if (hashmap.find(newsgroup_title) != hashmap.end) {
 		//return error msg in protocol
@@ -70,8 +69,8 @@ inmemory_db::addNewsgroup(string newsgroup_title)
 	}
 }
 
-int 
-inmemory_db::deleteNewsgroup(string newsgroup_title) 
+int
+InMemoryDataBase::deleteNewsgroup(string newsgroup_title)
 {
 	auto itr = hashmap.find(newsgroup_title);
 	if (itr == hashmap.end) {
@@ -83,8 +82,8 @@ inmemory_db::deleteNewsgroup(string newsgroup_title)
 	}
 }
 
-string 
-inmemory_db::getArticle(string newsgroup_title, string article_name) 
+string
+InMemoryDataBase::getArticle(string newsgroup_title, string article_name)
 {
 	auto itr = hashmap.find(newsgroup_title);
 	if (itr == hashmap.end) {
@@ -98,7 +97,7 @@ inmemory_db::getArticle(string newsgroup_title, string article_name)
 }
 
 vector<Article>
-inmemory_db::getArticles(string newsgroup_title) 
+InMemoryDataBase::getArticles(string newsgroup_title)
 {
 	vector<Article> vec;
 	auto itr = hashmap.find(newsgroup_title);
@@ -110,4 +109,3 @@ inmemory_db::getArticles(string newsgroup_title)
 		return vec;
 	}
 }
-

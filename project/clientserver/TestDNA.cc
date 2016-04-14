@@ -1,9 +1,9 @@
 
 #include <iostream>
-#include "inmemory_db.h"
+#include "in_memory_data_base.h"
 #include "database.h"
 #include "newsgroup.h"
-#include "Article.h"
+#include "article.h"
 
 using namespace std;
 
@@ -38,7 +38,7 @@ int main()
 
 	//Test IMDB class
 	cout << "3. Test IMDB class:" << endl;
-	inmemory_db imdb;
+	in_memory_data_base imdb;
 	cout << "Testing addArticle..." << endl;
 	imdb.addArticle("Newsgroup", "Article name", "Author 3", "Text 3");
 	cout << "addArticle successful!" << endl;
@@ -57,4 +57,3 @@ int main()
 	imdb.deleteArticle("Newsgroup", "Article name");
 	cout << "Deletion successful!" << endl;
 }
-

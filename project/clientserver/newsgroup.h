@@ -4,18 +4,19 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include "Article.h"
+
+class Article;
 
 class Newsgroup {
 public:
     Newsgroup(int id, std::string name);
 
-    int id();
-    std::string name();
-    std::string getArticle(std::string sought_article) const;
-    std::string listNewsgroup() const;
-    std::string deleteArticle(std::string article_name);
-    void addArticle(Article a);
+    int         id              ();
+    std::string name            ();
+    std::string getArticle      (std::string sought_article) const;
+    std::string listNewsgroup   () const;
+    std::string deleteArticle   (std::string article_name);
+    void        addArticle      (Article a);
 
 private:
     std::string name_;

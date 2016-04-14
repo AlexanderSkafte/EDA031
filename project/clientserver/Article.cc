@@ -1,6 +1,6 @@
 #include <string>
 
-#include "Article.h"
+#include "article.h"
 
 using namespace std;
 
@@ -9,7 +9,6 @@ Article::Article(string author, string text, string title)
     , text_{text}
     , title_{title}
 { }
-
 
 string
 Article::title()
@@ -27,4 +26,3 @@ Article::text()
 {
     return text_;
 }
-
