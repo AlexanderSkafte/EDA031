@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "client.h"
+#include "adapter.h"
 #include "connection.h"
 #include <iostream>
 #include <string>
@@ -9,14 +9,10 @@
 using namespace protocol;
 using namespace std;
 
-client::client()
-{
-	inmemorydb db = new inmemorydb(); // does not work, db is local
-	// how should the constructor be?
-}
+Adapter::Adapter() { }
 
 void
-client::listNewsgroups(MessageHandler mh)
+Adapter::listNewsgroups(MessageHandler mh)
 {
     vector<pair<string, unsigned int>> vec = db.listNewsgroups();
     if (vec.empty()) {
@@ -36,7 +32,7 @@ client::listNewsgroups(MessageHandler mh)
 }
 
 void
-client::createNewsgroup(MessageHandler mh)
+Adapter::createNewsgroup(MessageHandler mh)
 {
 	string newsgroup_name = mh.recvString();
 	unsigned char resp = db.deleteNewsgroup(newsgroup_name);
@@ -53,7 +49,7 @@ client::createNewsgroup(MessageHandler mh)
 }
 
 void
-client::deleteNewsgroup(MessageHandler mh)
+Adapter::deleteNewsgroup(MessageHandler mh)
 {
 
     string newsgroup_name = mh.recvString();
@@ -71,7 +67,7 @@ client::deleteNewsgroup(MessageHandler mh)
 }
 
 void
-client::writeArticle(MessageHandler mh)
+Adapter::writeArticle(MessageHandler mh)
 {
 	string news_n = mh.recvString();
 	string title = recvString();
@@ -92,7 +88,7 @@ client::writeArticle(MessageHandler mh)
 
 
 void
-client::listArticles(MessageHandler mh){
+Adapter::listArticles(MessageHandler mh){
     string news_n = mh.recvString();
 
     Vector<Article> vec = db.getArticles(news_n);
@@ -110,7 +106,7 @@ client::listArticles(MessageHandler mh){
 }
 
 void
-client::getArticle(MessageHandler mh)
+Adapter::getArticle(MessageHandler mh)
 {
    string news_n = mh.recvString();
    string art_n = mh.recvString();
@@ -124,4 +120,3 @@ client::getArticle(MessageHandler mh)
    		mh.sendString(result);
    }
    mh.sendByte(ANS_END);
-   

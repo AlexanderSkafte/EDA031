@@ -1,4 +1,4 @@
-#include "client.h"
+#include "adapter.h"
 #include "connection.h"
 #include "connectionclosedexception.h"
 #include "protocol.h"
@@ -23,7 +23,7 @@ map<int, string> options = {
 };
 
 void
-client::menu()
+menu()
 {
     cout << "Options:\n"
     for (const auto& entry : options) {
@@ -35,7 +35,7 @@ client::menu()
 int main(int argc, char* argv[])
 {
 	if (argc != 2 || argc != 3) {
-		cerr << "Usage: myclient host-name port-number" << endl;
+		cerr << "Usage: server_main host-name port-number" << endl;
 		exit(1);
 	}
 
@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-	client db;
+	Adapter adapter;
 
 	cout << "Server running" << endl;
 
@@ -67,38 +67,38 @@ int main(int argc, char* argv[])
 				switch (ch) {
 
 		        case Protocol::COM_LIST_NG:
-		            db.listNewsgroups();
+		            adapter.listNewsgroups();
 		            break;
 
 		        case Protocol::COM_CREATE_NG:
-		            db.createNewsgroup(mh);
+		            adapter.createNewsgroup(mh);
 		            break;
 
 		        case Protocol::COM_DELETE_NG:
-		            db.deleteNewsgroup(mh);
+		            adapter.deleteNewsgroup(mh);
 		            break;
 
 		        case Protocol::COM_LIST_ART:
-		            db.listArticles(mh);
+		            adapter.listArticles(mh);
 		            break;
 
 		        case Protocol::COM_GET_ART:
-		            db.readArticle(mh);
+		            adapter.readArticle(mh);
 		            break;
 
 		        case Protocol::COM_CREATE_ART:
-		            db.createArticle(mh);
+		            adapter.createArticle(mh);
 		            break;
 
 		        case Protocol::COM_DELETE_ART:
-		            db.deleteArticle(mh);
+		            adapter.deleteArticle(mh);
 		            break;
 
 		        default:
 		            cerror << "Choice does not exist." << endl;
 		            exit(1);
 		        }
-	    	} catch (connectionclosedexception&) {
+	    	} catch (ConnectionClosedException&) {
 	    		server.deregisterConnection(conn);
 	    		cout << "closed client connection"<< endl;
 	    	}

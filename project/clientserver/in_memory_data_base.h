@@ -42,7 +42,7 @@ public:
 
 	std::vector<Article>
 		getArticles(
-			std::string newsgroup_title); //Lists all arts in NG
+			std::string newsgroup_title);
 
 private:
 	std::unordered_map<std::string, Newsgroup> hashmap;
