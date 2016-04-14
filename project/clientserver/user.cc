@@ -191,7 +191,28 @@ void createArticle(MessageHandler mh) {
 }
 
 void deleteArticle(MessageHandler mh) {
+	cout << "Name of the Newsgroup?" << endl;
+	string news_n;
+	cin >> news_n;
+	cout << "Name of the Artcle?" << endl;
+	string art;
+	cin >> art;
 
+	mh.sendByte(Protocol::PAR_STRING);
+	mh.sendString(news_n);
+	mh.sendByte(Protocol::PAR_STRING);
+	mh.sendString(art);
+
+	unsigned char resp = mh.recvByte();
+	if (resp == Protocol::ANS_ACK) {
+		cout << "Article was deleted" << endl;
+	} else if (resp == Protocol::ANS_NAK) {
+		cout << "Could not find the article" << endl;
+	} else {
+		//error?
+	}
+
+	mh.recvByte();
 }
 
 
