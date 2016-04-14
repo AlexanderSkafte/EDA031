@@ -20,10 +20,12 @@ client::listNewsgroups(MessageHandler mh)
     if (vec.empty()) {
     	mh.sendByte(Protocol::ANS_NAK);
     } else {
-    	mh.sendByte();
+    	mh.sendByte(Protocol::ANS_ACK);
 	    for (unsigned int i = vec.begin(); i != vec.end();  ++i) {
+	    	mh.sendByte(Protocol::PAR_STRING);
 	    	mh.sendString(vec.at(i).first + " ");
 	    	mh.sendInt(vec.at(i).second));
+			mh.sendByte(Protocol::PAR_STRING);
 			mh.sendString("\n");
 	    }
 	}
@@ -96,6 +98,7 @@ client::listArticles(MessageHandler mh){
     } else {
     	mh.sendByte(Protocol::ANS_ACK);
 	    for (unsigned int i = vec.begin(); i<veg.end(); i++) {
+	    	mh.sendByte(Protocol::PAR_STRING);
 	    	mh.sendString(vec.at(i).title() + "\n");
 	    }
 	}
@@ -114,6 +117,7 @@ getArticle(MessageHandler mh)
    		mh.sendByte(ANS_NAK);		
    } else {
    		mh.sendByte(ANS_ACK);
+   		mh.sendByte(Protocol::PAR_STRING);
    		mh.sendString(result);
    }
    mh.sendByte(ANS_END);
