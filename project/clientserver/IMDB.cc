@@ -12,13 +12,22 @@ IMDB::~IMDB() {
 	delete hashmap;
 
 }
+vector<pair<string, unsigned int>> 
+IMDB::listNewsgroups()) {
+	vector<pair<string, unsigned int>> vec;
+    for(auto ng: newsgroups){
+        vec.push_back(make_pair(ng.name(), ng.id()));
+    }
+    return vec;
+}
+
+
 
 /*Om NG inte finns -> skapa NG. Inga fel ska kunna ske här*/
-void 
-IMDB::addArticle(string newsgroup_title, string article_name, string author, string text) 
+int 
+IMDB::addArticle(string newsgroup_title, Article a); 
 {
-	Article a(article_id, author, text, article_name);
-	++article_id;
+	
 
 	auto itr = hashmap.find(newsgroup_title);
 	if (itr == hashmap.end()) {
@@ -31,9 +40,10 @@ IMDB::addArticle(string newsgroup_title, string article_name, string author, str
 	}
 
 	++newsgroup_id;
+	return Protocol::ERR_ART_DOES_NOT_EXIST;
 }
 
-string 
+int 
 IMDB::deleteArticle(string newsgroup_title, string article_name) 
 {
 	auto itr = hashmap.find(newsgroup_title);
@@ -47,28 +57,31 @@ IMDB::deleteArticle(string newsgroup_title, string article_name)
 	}
 }
 
-string 
+int 
 IMDB::addNewsgroup(string newsgroup_title) 
 {
 	if (hashmap.find(newsgroup_title) != hashmap.end) {
 		//return error msg in protocol
-		return "";
+		return Protocol::ERR_NG_ALREADY_EXISTS;
 	} else {
 		Newsgroup newNG(newsgroup_id, newsgroup_title);
 		++newsgroup_id;
 		hashmap.insert(newsgroup_title, newNG);
+		return ERR_NG_ALREADY_EXISTS
 	}
 }
 
-string 
+int 
 IMDB::deleteNewsgroup(string newsgroup_title) 
 {
 	auto itr = hashmap.find(newsgroup_title);
 	if (itr == hashmap.end) {
 		//return error msg in protocol
-		return "";
+		return Protocol::ERR_NG_DOES_NOT_EXIST;
 	} else {
 		hashmap.erase(itr);
+		return Protocol::ANS_ACK;
+	}
 }
 
 string 
@@ -86,18 +99,18 @@ IMDB::getArticle(string newsgroup_title, string article_name)
 	}
 }
 
-string 
-IMDB::getNewsgroup(string newsgroup_title) 
+vector<Article>
+IMDB::getArtcles(string newsgroup_title) 
 {
+	vector<Article> vec;
 	auto itr = hashmap.find(newsgroup_title);
 
 	if (itr == hashmap.end) {
 		//return error msg in protocol
-		return "";
+		return vec;
 	} else {
-		Newsgroup thisNG = itr->second;
-		string msg = thisNG.listNewsgroup();
-		return msg;
+		vec = hashmap[itr].listNewsgroups();
+		return vec;
 	}
 }
 
