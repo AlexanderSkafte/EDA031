@@ -1,8 +1,11 @@
+#include "client.h"
 #include "protocol.h"
 
-int main(int argc, char* argv[]) {
+int
+main(int argc, char* argv[])
+{
 	if (argc != 3) {
-		cerr << "How to use the client: client hostname port"<< endl;
+		cout << "usage: client hostname port"<< endl;
 		exit(1);
 	}
 
@@ -11,7 +14,7 @@ int main(int argc, char* argv[]) {
 	try {
 		port = stoi(argv[2]);
 	} catch (exception& e) {
-		cerr << "Invalid port. " << e.what << endl;
+		cerr << "Invalid port." << e.what() << endl;
 		exit(1);
 	}
 
@@ -19,11 +22,11 @@ int main(int argc, char* argv[]) {
 	Connection conn(argv[1], port);
 
 	if (!conn.isConnected()) {
-		cerr << "Connection failed" << endl;
+		cerr << "Connection failed." << endl;
 		exit(1);
 	}
 
-	cout << "Connection established" <<endl;
+	cout << "Connection established." <<endl;
 
 	auto ptr = shared_ptr<Connection>(&conn);
 	MessageHandler mh(ptr);
@@ -37,59 +40,71 @@ int main(int argc, char* argv[]) {
 			switch (command) {
 
 			case Protocol::COM_LIST_NG:
-				list_ng(mh);
+				listNewsgroups(mh);
 				break;
+
 			case Protocol::COM_CREATE_NG:
 				createNewsgroup(mh);
 				break;
+
 			case Protocol::COM_DELETE_NG:
 				deleteNewsgroup(mh);
 				break;
+
 			case Protocol::COM_LIST_ART:
-				listArt(mh);
+				listArticles(mh);
 				break;
+
 			case Protocol::COM_CREATE_ART:
-				createArt(mh);
+				createArticles(mh);
 				break;
+
 			case Protocol::COM_DELETE_ART:
-				deleteArt(mh);
+				deleteArticles(mh);
 				break;
+
 			case Protocol::COM_GET_ART:
-				getArt(mh);
+				getArticlesicles(mh);
 				break;
-			case: Protocol::COM_END:
-				cout<< "Exiting" << endl;
+
+			case Protocol::COM_END:
+				cout<< "Exiting." << endl;
 				exit(0);
+
 			default:
-				cout<< "Invalid command" << endl;
+				cout<< "Invalid command." << endl;
 				break;
 			}
 
 
 		}
 	} catch (ConnectionClosedException&) {
-		cout << "The server is not responding" << endl;
+		cout << "The server is not responding." << endl;
 		exit(1);
 	}
 }
 
-int parse_command(string line) {
+int
+Client::parse_command(string line)
+{
 	stringstream ss(line);
 	int command;
 	try {
 		ss >> command;
 	} catch (exception&) {
-		cerr << "Invalid command, enter a number. Exiting" << endl;
+		cerr << "Invalid command, enter a number; Exiting." << endl;
 		exit(1);
 	}
 	return command;
 }
 
-void list_ng(MessageHandler mh) {
+void
+Client::listNewsgroups(MessageHandler mh)
+{
 	unsigned char c = mh.recvByte();
 	if (c == Protocol::ANS_NAK) {
 		mh.recvByte();
-		cout << "No newsgroups are created yet" << endl;
+		cout << "No newsgroups are created yet." << endl;
 	} else if (c == Protocol::ANS_ACK) {
 		unsigned int s = mh.recvInt();
 		for (unsigned int i = 0; i<s; ++i) {
@@ -99,7 +114,9 @@ void list_ng(MessageHandler mh) {
 	}
 }
 
-void createNewsgroup(MessageHandler mh) {
+void
+Client::createNewsgroup(MessageHandler mh)
+{
 	cout << "Name of the new Newsgroup?" << endl;
 	string name;
 	cin >> name;
@@ -107,16 +124,18 @@ void createNewsgroup(MessageHandler mh) {
 	mh.sendString(name);
 	unsigned char resp = mh.recvByte();
 	if (resp ==Protocol::ANS_ACK) {
-		cout << "The newsgroup was added to the database" << endl;
+		cout << "The newsgroup was added to the database." << endl;
 	} else if (resp == Protocol::ANS_NAK) {
-		cout << "The newsgroup already existed" << endl;
+		cout << "The newsgroup already existed." << endl;
 	} else {
 		//error?
 	}
 	mh.recvByte();
 }
 
-void deleteNewsgroup(MessageHandler mh) {
+void
+Client::deleteNewsgroup(MessageHandler mh)
+{
 	cout << "Name of the new Newsgroup?" << endl;
 	string name;
 	cin >> name;
@@ -125,9 +144,9 @@ void deleteNewsgroup(MessageHandler mh) {
 
 	unsigned char resp = mh.recvByte();
 	if (resp == Protocol::ANS_ACK) {
-		cout << "Newsgroup was deleted" << endl;
+		cout << "Newsgroup was deleted." << endl;
 	} else if (resp == Protocol::ANS_NAK) {
-		cout << "Error, no newsgroup have that name" << endl;
+		cout << "Error, no newsgroup have that name." << endl;
 	} else {
 		//error?
 	}
@@ -135,7 +154,9 @@ void deleteNewsgroup(MessageHandler mh) {
 	mh.recvByte();
 }
 
-void listArticles(MessageHandler mh) {
+void
+Client::listArticles(MessageHandler mh)
+{
 	cout << "Name of the Newsgroup?" << endl;
 	string name;
 	cin >> name;
@@ -146,7 +167,7 @@ void listArticles(MessageHandler mh) {
 	unsigned int size = mh.recvInt();
 
 	if (resp == Protocol::ANS_NAK) {
-		cout << "Error, either the newsgroup is empty or it does not exist" << endl;
+		cout << "Error, either the newsgroup is empty or it does not exist." << endl;
 	} else if (resp == Protocol::ANS_NAK) {
 		for (unsigned int i = 0; i<size; ++i) {
 			cout << mh.recvString() << " " << mh.recvInt() << endl;
@@ -155,7 +176,9 @@ void listArticles(MessageHandler mh) {
 	mh.recvByte();
 }
 
-void createArticle(MessageHandler mh) {
+void
+Client::createArticle(MessageHandler mh)
+{
 	cout << "Name of the new Newsgroup?" << endl;
 	string news_n;
 	cin >> news_n;
@@ -180,9 +203,9 @@ void createArticle(MessageHandler mh) {
 
 	unsigned char resp = mh.recvByte();
 	if (resp == Protocol::ANS_ACK) {
-		cout << "Article was created" << endl;
+		cout << "Article was created." << endl;
 	} else if (resp == Protocol::ANS_NAK) {
-		cout << "Article and Newsgroup was created" << endl;
+		cout << "Article and Newsgroup was created." << endl;
 	} else {
 		//error?
 	}
@@ -190,7 +213,9 @@ void createArticle(MessageHandler mh) {
 	mh.recvByte();
 }
 
-void deleteArticle(MessageHandler mh) {
+void
+Client::deleteArticle(MessageHandler mh)
+{
 	cout << "Name of the Newsgroup?" << endl;
 	string news_n;
 	cin >> news_n;
@@ -205,9 +230,9 @@ void deleteArticle(MessageHandler mh) {
 
 	unsigned char resp = mh.recvByte();
 	if (resp == Protocol::ANS_ACK) {
-		cout << "Article was deleted" << endl;
+		cout << "Article was deleted." << endl;
 	} else if (resp == Protocol::ANS_NAK) {
-		cout << "Could not find the article" << endl;
+		cout << "Could not find the article." << endl;
 	} else {
 		//error?
 	}
@@ -216,7 +241,9 @@ void deleteArticle(MessageHandler mh) {
 }
 
 
-void getArticle(MessageHandler mh) {
+void
+Client::getArticle(MessageHandler mh)
+{
 	cout << "Name of the Newsgroup?" << endl;
 	string news_n;
 	cin >> news_n;
@@ -226,7 +253,7 @@ void getArticle(MessageHandler mh) {
 
 	unsigned char resp = mh.recvByte();
 	if (resp == Protocol::ANS_NAK) {
-		cout << "No such article/newsgroup" << endl;
+		cout << "No such article/newsgroup." << endl;
 	} else if (resp == Protocol::ANS_ACK) {
 		cout << "Here is the text: " << mh.recvString() << endl;
 	} else {
