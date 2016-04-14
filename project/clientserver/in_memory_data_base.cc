@@ -48,10 +48,11 @@ InMemoryDataBase::deleteArticle(string newsgroup_title, string article_name)
 	auto itr = hashmap.find(newsgroup_title);
 	if (itr == hashmap.end) {
 		//return error msg in protocol
-		return "";
+		return Protocol::ERR_ART_DOES_NOT_EXIST;
 	} else {
 		Newsgroup thisNG = itr->second;
-		return thisNG.deleteArticle(article_name);
+		hashmap.erase(it->);
+		return Protocol::ANS_DELETE_ART;
 	}
 }
 

@@ -9,14 +9,14 @@
 using namespace protocol;
 using namespace std;
 
-client::client()
+Client::Client()
 {
 	inmemorydb db = new inmemorydb(); // does not work, db is local
 	// how should the constructor be?
 }
 
 void
-client::listNewsgroups(MessageHandler mh)
+Client::listNewsgroups(MessageHandler mh)
 {
     vector<pair<string, unsigned int>> vec = db.listNewsgroups();
     if (vec.empty()) {
@@ -36,7 +36,7 @@ client::listNewsgroups(MessageHandler mh)
 }
 
 void
-client::createNewsgroup(MessageHandler mh)
+Client::createNewsgroup(MessageHandler mh)
 {
 	string newsgroup_name = mh.recvString();
 	unsigned char resp = db.deleteNewsgroup(newsgroup_name);
@@ -71,7 +71,25 @@ client::deleteNewsgroup(MessageHandler mh)
 }
 
 void
-client::writeArticle(MessageHandler mh)
+Client::listArticles(MessageHandler mh){
+    string news_n = mh.recvString();
+
+    Vector<Article> vec = db.getArticles(news_n);
+    if (vec.empty()) {
+    	mh.sendByte(Protocol::ANS_NAK);
+    } else {
+    	mh.sendByte(Protocol::ANS_ACK);
+	    for (unsigned int i = vec.begin(); i<veg.end(); i++) {
+	    	mh.sendByte(Protocol::PAR_STRING);
+	    	mh.sendString(vec.at(i).title() + "\n");
+	    }
+	}
+    mh.sendByte(Protocol::ANS_END);
+
+}
+
+void
+Client::createArticle(MessageHandler mh)
 {
 	string news_n = mh.recvString();
 	string title = recvString();
@@ -92,25 +110,7 @@ client::writeArticle(MessageHandler mh)
 
 
 void
-client::listArticles(MessageHandler mh){
-    string news_n = mh.recvString();
-
-    Vector<Article> vec = db.getArticles(news_n);
-    if (vec.empty()) {
-    	mh.sendByte(Protocol::ANS_NAK);
-    } else {
-    	mh.sendByte(Protocol::ANS_ACK);
-	    for (unsigned int i = vec.begin(); i<veg.end(); i++) {
-	    	mh.sendByte(Protocol::PAR_STRING);
-	    	mh.sendString(vec.at(i).title() + "\n");
-	    }
-	}
-    mh.sendByte(Protocol::ANS_END);
-
-}
-
-void
-client::getArticle(MessageHandler mh)
+Client::getArticle(MessageHandler mh)
 {
    string news_n = mh.recvString();
    string art_n = mh.recvString();
