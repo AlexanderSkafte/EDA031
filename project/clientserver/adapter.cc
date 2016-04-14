@@ -9,12 +9,8 @@
 using namespace protocol;
 using namespace std;
 
-<<<<<<< HEAD:project/Adapterserver/Adapter.cc
 Adapter::Adapter()
-{
-	inmemorydb db = new inmemorydb(); // does not work, db is local
-	// how should the constructor be?
-}
+{ }
 
 void
 Adapter::listNewsgroups(MessageHandler mh)
@@ -71,7 +67,7 @@ Adapter::deleteNewsgroup(MessageHandler mh)
     mh.sendByte(Protocol::ANS_END);
 }
 
-void 
+void
 Adapter::listArticles(MessageHandler mh){
     string news_n = mh.recvString();
 
@@ -124,7 +120,7 @@ Adapter::deleteArticle(MessageHandler mh) {
 	}
 	mh.sendByte(Protocol::ANS_END);
 }
- 
+
 void
 Adapter::getArticle(MessageHandler mh)
 {
@@ -141,4 +137,3 @@ Adapter::getArticle(MessageHandler mh)
    }
    mh.sendByte(ANS_END);
 }
-
