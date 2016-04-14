@@ -38,7 +38,7 @@ int main()
 
 	//Test IMDB class
 	cout << "3. Test IMDB class:" << endl;
-	in_memory_data_base imdb;
+	InMemoryDataBase imdb;
 	cout << "Testing addArticle..." << endl;
 	imdb.addArticle("Newsgroup", "Article name", "Author 3", "Text 3");
 	cout << "addArticle successful!" << endl;
