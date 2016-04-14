@@ -15,8 +15,8 @@ inmemory_db::~inmemory_db() {
 vector<pair<string, unsigned int>> 
 inmemory_db::listNewsgroups()) {
 	vector<pair<string, unsigned int>> vec;
-    for(auto ng: newsgroups){
-        vec.push_back(make_pair(ng.name(), ng.id()));
+    for(auto ng: hashmap){
+        vec.push_back(make_pair(ng.second.name(), ng.second.id()));
     }
     return vec;
 }
@@ -25,7 +25,7 @@ inmemory_db::listNewsgroups()) {
 
 /*Om NG inte finns -> skapa NG. Inga fel ska kunna ske här*/
 int 
-inmemory_db::addArticle(string newsgroup_title, Article a); 
+inmemory_db::addArticle(string newsgroup_title, Article a)
 {
 	
 
@@ -38,7 +38,7 @@ inmemory_db::addArticle(string newsgroup_title, Article a);
 		Newsgroup& thisNG = itr->second;
 		thisNG.addArticle(a);
 	}
-
+	//ska man kolla om artiklen redan finns?
 	++newsgroup_id;
 	return Protocol::ERR_ART_DOES_NOT_EXIST;
 }
