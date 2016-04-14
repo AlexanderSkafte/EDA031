@@ -51,8 +51,8 @@ InMemoryDataBase::deleteArticle(string newsgroup_title, string article_name)
 		return Protocol::ERR_ART_DOES_NOT_EXIST;
 	} else {
 		Newsgroup thisNG = itr->second;
-		hashmap.erase(it->);
-		return Protocol::ANS_DELETE_ART;
+		thisNG.deleteArticle(article_name)
+		return Protocol::ANS_ACK;
 	}
 }
 

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "client.h"
+#include "adapter.h"
 #include "connection.h"
 #include <iostream>
 #include <string>
@@ -9,14 +9,15 @@
 using namespace protocol;
 using namespace std;
 
-Client::Client()
+<<<<<<< HEAD:project/Adapterserver/Adapter.cc
+Adapter::Adapter()
 {
 	inmemorydb db = new inmemorydb(); // does not work, db is local
 	// how should the constructor be?
 }
 
 void
-Client::listNewsgroups(MessageHandler mh)
+Adapter::listNewsgroups(MessageHandler mh)
 {
     vector<pair<string, unsigned int>> vec = db.listNewsgroups();
     if (vec.empty()) {
@@ -28,13 +29,15 @@ Client::listNewsgroups(MessageHandler mh)
 	    	mh.sendByte(Protocol::PAR_STRING);
 	    	mh.sendString(vec.at(i).first + " ");
 	    	mh.sendInt(vec.at(i).second));
+			mh.sendByte(Protocol::PAR_STRING);
+			mh.sendString("\n");
 	    }
 	}
     mh.sendByte(Protocol::ANS_END);
 }
 
 void
-Client::createNewsgroup(MessageHandler mh)
+Adapter::createNewsgroup(MessageHandler mh)
 {
 	string newsgroup_name = mh.recvString();
 	unsigned char resp = db.deleteNewsgroup(newsgroup_name);
@@ -51,7 +54,7 @@ Client::createNewsgroup(MessageHandler mh)
 }
 
 void
-client::deleteNewsgroup(MessageHandler mh)
+Adapter::deleteNewsgroup(MessageHandler mh)
 {
 
     string newsgroup_name = mh.recvString();
@@ -68,8 +71,8 @@ client::deleteNewsgroup(MessageHandler mh)
     mh.sendByte(Protocol::ANS_END);
 }
 
-void
-Client::listArticles(MessageHandler mh){
+void 
+Adapter::listArticles(MessageHandler mh){
     string news_n = mh.recvString();
 
     Vector<Article> vec = db.getArticles(news_n);
@@ -87,7 +90,7 @@ Client::listArticles(MessageHandler mh){
 }
 
 void
-Client::createArticle(MessageHandler mh)
+Adapter::createArticle(MessageHandler mh)
 {
 	string news_n = mh.recvString();
 	string title = recvString();
@@ -106,12 +109,24 @@ Client::createArticle(MessageHandler mh)
     mh.sendByte(Protocol::ANS_END);
 }
 
-void Client::deleteArticle(MessageHandler mh) {
-	
-}
-
 void
-Client::getArticle(MessageHandler mh)
+Adapter::deleteArticle(MessageHandler mh) {
+	string news_n = mh.recvString();
+	string art_n = mh.recvString();
+
+	unsigned char resp = db.deleteArticle(news_n, art_n);
+	if (resp == Protocol::ERR_ART_DOES_NOT_EXIST) {
+		mh.sendByte(Protocol::ANS_NAK);
+	} else if (resp == Protocol::ANS_ACK) {
+		mh.sendByte(resp);
+	} else {
+
+	}
+	mh.sendByte(Protocol::ANS_END);
+}
+ 
+void
+Adapter::getArticle(MessageHandler mh)
 {
    string news_n = mh.recvString();
    string art_n = mh.recvString();
@@ -126,3 +141,4 @@ Client::getArticle(MessageHandler mh)
    }
    mh.sendByte(ANS_END);
 }
+

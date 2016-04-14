@@ -1,4 +1,9 @@
+#include <string>
+
+#include "messagehandler.h"
 #include "protocol.h";
+
+using namespace std;
 
 MessageHandler::MessageHandler(std::shared_ptr<Connection>& conn)
     : conn_{conn}
@@ -57,7 +62,7 @@ MessageHandler::recvByte() // throws ConnectionClosedException
 	return code;
 }
 
-std::string
+string
 MessageHandler::recvString()
 {
 	int par = recvByte();
