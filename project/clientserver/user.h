@@ -1,0 +1,7 @@
+
+class user {
+public:
+
+private:
+
+}

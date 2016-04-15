@@ -25,12 +25,14 @@ int main()
 	cout << "Newsgroup id: " << newsgroup.id() << endl;
 	cout << "Newsgroup name: " << newsgroup.name() << endl;
 	cout << "Adding article to newsgroup..." << endl;
-	newsgroup.addArticle(a1);
+	newsgroup.createArticle(a1);
 	Article a2(0, "Author 2", "Text 2", "Title 2");
-	newsgroup.addArticle(a2);
+	newsgroup.createArticle(a2);
 	cout << "Adding successful!" << endl << endl;
 	cout << "Newsgroup list: " << endl;
-	cout << newsgroup.listNewsgroup() << endl;
+    for (Article a : newsgroup.articles()) {
+        cout << a.title() << " " << a.author() << endl;
+    }
 	cout << "Testing delete function..." << endl;
 	newsgroup.deleteArticle("Title 2");
 	cout << "Delete function successful" << endl;
@@ -40,10 +42,10 @@ int main()
 	cout << "3. Test IMDB class:" << endl;
 	InMemoryDataBase imdb;
 	cout << "Testing addArticle..." << endl;
-	imdb.addArticle("Newsgroup", "Article name", "Author 3", "Text 3");
+	imdb.createArticle("Newsgroup", "Article name", "Author 3", "Text 3");
 	cout << "addArticle successful!" << endl;
 	cout << "Testing addNewsgroup..." << endl;
-	imdb.addNewsgroup("addNewsgroup test");
+	imdb.createNewsgroup("addNewsgroup test");
 	cout << "addNewsgroup was successful!" << endl;
 	cout << "Testing getNewsgroup: " << endl;
 	//cout << "1. " << imdb.getArticles("addNewsgroup test") << endl;

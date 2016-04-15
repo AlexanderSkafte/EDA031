@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include <map>
 
 class Article;
 
@@ -12,7 +13,8 @@ public:
 
     int             id              () const;
     std::string     name            () const;
-    map<Article>    articles        () const;
+    std::vector<Article>
+                    articles        () const;
     void            createArticle   (const Article& a);
     std::string     deleteArticle   (const std::string& title);
     std::string     getArticle      (const std::string& title) const;

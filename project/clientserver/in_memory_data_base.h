@@ -16,8 +16,8 @@ public:
 	InMemoryDataBase();
 	~InMemoryDataBase();
 
-	vector<pair<string, unsigned int>>
-		InMemoryDataBase::listNewsgroups();
+    std::vector<std::pair<std::string, unsigned int>>
+		listNewsgroups();
 
 	int
 		createNewsgroup(
