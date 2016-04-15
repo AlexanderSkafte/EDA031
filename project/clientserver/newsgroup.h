@@ -1,28 +1,27 @@
 #ifndef NEWSGROUP_H
 #define NEWSGROUP_H
 
+#include <iostream>
 #include <string>
-#include <list>
-#include <map>
+#include <vector>
 
 class Article;
 
 class Newsgroup {
 public:
-    Newsgroup                       (int id, const std::string& name);
+	Newsgroup(int id, std::string name);
 
-    int             id              () const;
-    std::string     name            () const;
-    std::vector<Article>
-                    articles        () const;
-    void            createArticle   (const Article& a);
-    std::string     deleteArticle   (const std::string& title);
-    std::string     getArticle      (const std::string& title) const;
+	int         id();
+	std::string name();
+	std::string getArticle(const std::string& sought_article) const;
+	std::vector<Article> listNewsgroup() const;
+	std::string deleteArticle(std::string article_name);
+	void        addArticle(Article a);
 
 private:
-    std::string name_;
-    std::string id_;
-    std::list<Article> articles_;
+	std::string name_;
+	int id_;
+	std::vector<Article> articles_;
 };
 
 #endif

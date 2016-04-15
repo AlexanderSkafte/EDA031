@@ -1,63 +1,71 @@
+
 #include <string>
 #include <algorithm>
+#include "article.h"
+#include "newsgroup.h"
 
 using namespace std;
 
-Newsgroup(int id, string name)
-    : id_{id}
-    , name_{name}
-{ }
+Newsgroup::Newsgroup(int id, string name)
+	: id_{id}
+	, name_{name}
+{
+
+}
 
 int
-Newsgroup::id() const
+Newsgroup::id()
 {
-    return id_;
+	return id_;
 }
 
 string
-Newsgroup::name() const
+Newsgroup::name()
 {
-    return name_;
+	return name_;
+}
+
+string
+Newsgroup::getArticle(const string& sought_article) const
+{
+	auto itr = find_if(articles_.begin(), articles_.end(),
+		[sought_article](Article current_article) {
+		return current_article.title() == sought_article;
+	});
+	if (itr != articles_.end()) {
+		string article = itr->title() + "\n"
+			+ itr->author() + "\n"
+			+ itr->text() + "\n";
+		return article;
+	}
+	else {
+		//Probably faulty logic, fix this case
+		return nullptr;
+	}
 }
 
 vector<Article>
-Newsgroup::articles() const
+Newsgroup::listNewsgroup() const
 {
 	return articles_;
 }
 
-void
-Newsgroup::createArticle(const Article& a)
-{
-	articles_.push_back(a);
-}
-
 string
-Newsgroup::deleteArticle(const string& title)
+Newsgroup::deleteArticle(string article_name)
 {
 	auto itr = remove_if(articles_.begin(), articles_.end(),
-		[&title](const Article& a) {
-			return title == a.title();
-		});
-	if (itr != articles_.end()) {
-		articles_.erase(itr, articles_.end());
-		return "Deleted article '" + artName + "'.";
-	} else {
+		[article_name](Article a) {
+		return article_name == a.title();
+	});
+	if (itr == articles_.end()) {
 		return "No article by this name to delete error";
 	}
+	articles_.erase(itr, articles_.end());
+	return "Deleted article ";
 }
 
-string
-Newsgroup::getArticle(const string& title) const
+void
+Newsgroup::addArticle(Article a)
 {
-	auto itr = find_if(articles_.begin(), articles_.end(),
-		[&title](const Article& a) {
-			return title == a.title();
-		});
-	if (itr != articles_.end()) {
-        return itr->title() + "\n" + itr->author() + "\n" + itr->text() + "\n";
-	} else {
-		//Probably faulty logic, fix this case
-		return nullptr;
-	}
+	articles_.push_back(a);
 }
