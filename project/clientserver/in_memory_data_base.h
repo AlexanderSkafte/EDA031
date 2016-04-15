@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "database.h"
+#include "protocol.h"
 
 class Newsgroup;
 class Article;

@@ -25,7 +25,7 @@ InMemoryDataBase::listNewsgroups()
 }
 
 int
-InMemoryDataBase::createNewsgroup(string newsgroup_name)
+InMemoryDataBase::createNewsgroup(const string& newsgroup_name)
 {
 	if (hashmap.find(newsgroup_name) != hashmap.end()) {
 		//return error msg in protocol
@@ -34,12 +34,12 @@ InMemoryDataBase::createNewsgroup(string newsgroup_name)
 		Newsgroup newNG(newsgroup_id, newsgroup_name);
 		++newsgroup_id;
 		hashmap.insert(newsgroup_name, newNG);
-		return ERR_NG_ALREADY_EXISTS;
+        return Protocol::ERR_NG_ALREADY_EXISTS;
 	}
 }
 
 int
-InMemoryDataBase::deleteNewsgroup(string newsgroup_name)
+InMemoryDataBase::deleteNewsgroup(const string& newsgroup_name)
 {
 	auto itr = hashmap.find(newsgroup_name);
 	if (itr == hashmap.end()) {
@@ -52,7 +52,7 @@ InMemoryDataBase::deleteNewsgroup(string newsgroup_name)
 }
 
 vector<Article>
-InMemoryDataBase::listArticles(string newsgroup_name)
+InMemoryDataBase::listArticles(const string& newsgroup_name)
 {
 	vector<Article> vec;
 	auto itr = hashmap.find(newsgroup_name);
@@ -67,7 +67,10 @@ InMemoryDataBase::listArticles(string newsgroup_name)
 
 /*Om NG inte finns -> skapa NG. Inga fel ska kunna ske här*/
 void
-InMemoryDataBase::createArticle(const string& newsgroup_name, Article a)
+InMemoryDataBase::createArticle(const string& newsgroup_name,
+                                const string& article_title,
+                                const string& author,
+                                const string& text)
 {
 	auto itr = hashmap.find(newsgroup_name);
 	if (itr == hashmap.end()) {
@@ -84,7 +87,8 @@ InMemoryDataBase::createArticle(const string& newsgroup_name, Article a)
 }
 
 int
-InMemoryDataBase::deleteArticle(string newsgroup_name, string article_name)
+InMemoryDataBase::deleteArticle(const string& newsgroup_name,
+                                const string& article_name)
 {
 	auto itr = hashmap.find(newsgroup_name);
 	if (itr == hashmap.end) {
@@ -92,13 +96,14 @@ InMemoryDataBase::deleteArticle(string newsgroup_name, string article_name)
 		return Protocol::ERR_ART_DOES_NOT_EXIST;
 	} else {
 		Newsgroup thisNG = itr->second;
-		thisNG.deleteArticle(article_name)
+        thisNG.deleteArticle(article_name);
 		return Protocol::ANS_ACK;
 	}
 }
 
 string
-InMemoryDataBase::getArticle(string newsgroup_name, string article_name)
+InMemoryDataBase::getArticle(const string& newsgroup_name,
+                             const string& article_name)
 {
 	auto itr = hashmap.find(newsgroup_name);
 	if (itr == hashmap.end()) {
