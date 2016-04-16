@@ -11,13 +11,40 @@
 class DataBase {
 public:
 	virtual ~DataBase() {} //destructor for inherited class
-	virtual void addArticle(std::string newsgroup_title, std::string article_name,
-		std::string author, std::string text) = 0;
-	virtual int deleteArticle(std::string newsgroup_title, std::string article_name) = 0;
-	virtual int addNewsgroup(std::string newsgroup_title) = 0;
-	virtual int deleteNewsgroup(std::string newsgroup_title) = 0;
-	virtual std::string getArticle(std::string newsgroup_title, std::string article_name) = 0;
-	virtual std::vector<Article> getArticles(std::string newsgroup_title) = 0; //Lists all arts in NG
+	
+    virtual std::vector<std::pair<std::string, unsigned int>>
+		listNewsgroups() = 0;
+    
+    virtual int
+        addNewsgroup(
+                std::string) = 0;
+    
+    virtual int
+        deleteNewsgroup(
+                    std::string newsgroup_title) = 0;
+    
+    
+    virtual std::vector<Article>
+        getArticles(
+                std::string newsgroup_title) = 0;
+    
+    virtual void
+        addArticle(
+               std::string newsgroup_title, std::string article_name,
+               std::string author, std::string text) = 0;
+    
+    virtual int
+        deleteArticle(
+                  std::string newsgroup_title,
+                  std::string article_name) = 0;
+    
+    
+    
+    virtual std::string
+        getArticle(
+               std::string newsgroup_title,
+               std::string article_name) = 0;
+
 };
 
 #endif
