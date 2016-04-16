@@ -29,15 +29,16 @@ MessageHandler::sendInt(int value) // throws ConnectionClosedException
 	b = (value >> 8);
 	sendByte(b);
 	b = value;
+	sendByte(b);
 }
 
 void
-MessageHandler::sendString(const string& str)
+MessageHandler::sendString(string str)
 {
 	sendByte(Protocol::PAR_STRING);
 	sendInt(str.size());
-	for (unsigned int i = 0; i < str.size(); ++i) {
-		sendByte(str[i]);
+	for (char c : str) {
+		sendByte(c);
 	}
 }
 
@@ -64,8 +65,8 @@ MessageHandler::recvString()
 {
 	int par = recvByte();
 	string str = "";
+	stuff = par;
 	if (par != Protocol::PAR_STRING) {
-		exit(1);
 	} else {
 		int n = recvInt();
 		for (int i = 0; i < n; i++) {
@@ -74,5 +75,10 @@ MessageHandler::recvString()
 		}
 	}
 	return str;
+}
+
+int
+MessageHandler::test() {
+	return stuff;
 }
 

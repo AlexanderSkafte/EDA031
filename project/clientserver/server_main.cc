@@ -62,8 +62,9 @@ int main(int argc, char* argv[])
 		auto conn = server.waitForActivity();
 		if (conn != nullptr) {
 			try {
-				unsigned char ch = conn->read();
 				MessageHandler mh(conn);
+				unsigned char ch = mh.recvByte();
+				
 
 				switch (ch) {
 
@@ -97,7 +98,6 @@ int main(int argc, char* argv[])
 
 		        default:
 		            cerr << "Choice does not exist." << endl;
-		            exit(1);
 		        }
 	    	} catch (ConnectionClosedException&) {
 	    		server.deregisterConnection(conn);

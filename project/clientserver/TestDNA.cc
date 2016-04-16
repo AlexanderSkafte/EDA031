@@ -39,6 +39,10 @@ int main()
 	//Test IMDB class
 	cout << "3. Test IMDB class:" << endl;
 	InMemoryDataBase imdb;
+	cout << "testing addNewsgroup" << endl;
+	imdb.addNewsgroup("apa");
+	vector<pair<string, unsigned int>> veco = imdb.listNewsgroups();
+	cout << veco.at(0).first << "does it work?" << endl;
 	cout << "Testing addArticle..." << endl;
 	imdb.addArticle("Newsgroup", "Article name", "Author 3", "Text 3");
 	cout << "addArticle successful!" << endl;

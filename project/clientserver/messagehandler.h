@@ -11,13 +11,14 @@ public:
 	int 			readCode	();
 	void			sendByte	(unsigned char);
 	void			sendInt		(int value);
-	void			sendString	(const std::string& str);
+	void			sendString	(std::string str);
 	int				recvInt		();
 	int				recvByte	();
 	std::string 	recvString	();
-
+	int 			test		();
 private:
 	std::shared_ptr<Connection>& conn_;
+	int stuff = 0;
 };
 
 #endif

@@ -74,7 +74,7 @@ InMemoryDataBase::addNewsgroup(string newsgroup_title)
 		Newsgroup newNG(newsgroup_id, newsgroup_title);
 		++newsgroup_id;
 		hashmap.insert(make_pair(newsgroup_title, newNG));
-		return Protocol::ERR_NG_ALREADY_EXISTS;
+		return Protocol::ERR_NG_DOES_NOT_EXIST;
 	}
 }
 

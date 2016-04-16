@@ -33,7 +33,7 @@ void writeString(const shared_ptr<Connection>& conn, const string& s) {
 }
 
 int main(int argc, char* argv[]){
-	if (argc != 3) {
+	if (argc != 2) {
 		cerr << "Usage: myserver port-number" << endl;
 		exit(1);
 	}

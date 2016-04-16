@@ -19,6 +19,7 @@ void    listArticles    (MessageHandler mh);
 void    createArticle   (MessageHandler mh);
 void    deleteArticle   (MessageHandler mh);
 void    getArticle      (MessageHandler mh);
+void 	sendCommand		(MessageHandler mh, int command);
 
 int
 main(int argc, char* argv[])
@@ -55,7 +56,7 @@ main(int argc, char* argv[])
 		while (getline(cin, line)) {
 			//print alternativen
 			int command = parse_command(line);
-			mh.sendInt(command);
+			mh.sendByte(command);
 			switch (command) {
 
 			case Protocol::COM_LIST_NG:
@@ -120,16 +121,20 @@ parse_command(string line)
 void
 listNewsgroups(MessageHandler mh)
 {
+	mh.sendByte(Protocol::COM_END);
 	unsigned char c = mh.recvByte();
 	if (c == Protocol::ANS_NAK) {
-		mh.recvByte();
 		cout << "No newsgroups are created yet." << endl;
-	} else if (c == Protocol::ANS_ACK) {
-		unsigned int s = mh.recvInt();
+	} else if (c == Protocol::ANS_LIST_NG) {
+		int s = mh.recvInt();
+		cout << "Vad är s? : " << s << endl;
 		for (unsigned int i = 0; i<s; ++i) {
-			cout << mh.recvString() << " " << mh.recvInt() << endl;
+			cout << mh.recvString() <<  endl;//" " << mh.recvInt() << endl;
 		}
-		mh.recvByte();
+	}
+	//buffer ANS_END
+	while (mh.recvByte() != Protocol::ANS_END) {
+
 	}
 }
 
@@ -139,17 +144,20 @@ createNewsgroup(MessageHandler mh)
 	cout << "Name of the new Newsgroup?" << endl;
 	string name;
 	cin >> name;
-	mh.sendByte(Protocol::PAR_STRING);
 	mh.sendString(name);
-	unsigned char resp = mh.recvByte();
+	mh.sendByte(Protocol::COM_END);
+	cin.clear();
+	unsigned int resp = mh.recvByte();
 	if (resp ==Protocol::ANS_ACK) {
-		cout << "The newsgroup was added to the database." << endl;
+		cout << "The newsgroup was added to the database." << endl;;
 	} else if (resp == Protocol::ANS_NAK) {
 		cout << "The newsgroup already existed." << endl;
 	} else {
-		//error?
+		cout << "kom jag hit?" << endl;
 	}
 	mh.recvByte();
+	cin.clear();
+	cin.ignore();
 }
 
 void

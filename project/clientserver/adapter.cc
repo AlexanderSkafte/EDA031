@@ -15,17 +15,19 @@ void
 Adapter::listNewsgroups(MessageHandler& mh)
 {
     vector<pair<string, unsigned int>> vec = db.listNewsgroups();
+ 	 //buffer out the COM_END
+    if (mh.recvByte() != Protocol::COM_END) {
+    	//error
+    	exit(1);
+    }
     if (vec.empty()) {
-    	mh.sendByte(Protocol::ANS_NAK);
+    	mh.sendInt(Protocol::ANS_NAK);
     } else {
-    	mh.sendByte(Protocol::ANS_ACK);
+    	mh.sendByte(Protocol::ANS_LIST_NG);
     	mh.sendInt(vec.size());
-	    for (auto i = vec.begin(); i != vec.end();  ++i) {
-	    	mh.sendByte(Protocol::PAR_STRING);
-	    	mh.sendString(i->first + " ");
-	    	mh.sendInt(i->second);
-			mh.sendByte(Protocol::PAR_STRING);
-			mh.sendString("\n");
+	    for (pair<string, unsigned int> p : vec) {
+	    	mh.sendString(p.first);
+	    	//mh.sendInt(p.second);
 	    }
 	}
     mh.sendByte(Protocol::ANS_END);
@@ -35,8 +37,12 @@ void
 Adapter::createNewsgroup(MessageHandler& mh)
 {
 	string newsgroup_name = mh.recvString();
-	unsigned char resp = db.deleteNewsgroup(newsgroup_name);
+	unsigned char resp = db.addNewsgroup(newsgroup_name);
 
+	unsigned char test = mh.recvByte(); //buffer out the COM_END
+	if (test != Protocol::COM_END) {
+		exit(1);
+	}
 	if (resp == Protocol::ERR_NG_DOES_NOT_EXIST) {
 		mh.sendByte(Protocol::ANS_ACK);
 	} else if (resp == Protocol::ERR_NG_ALREADY_EXISTS) {
