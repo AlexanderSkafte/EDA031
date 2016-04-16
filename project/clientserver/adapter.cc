@@ -122,6 +122,10 @@ void
 Adapter::deleteArticle(MessageHandler& mh) {
 	string newsgroup = mh.recvString();
 	string article   = mh.recvString();
+	unsigned char test = mh.recvByte(); //buffer out the COM_END
+	if (test != Protocol::COM_END) {
+		exit(1);
+	}
 
 	unsigned char resp = db.deleteArticle(newsgroup, article);
 	if (resp == Protocol::ERR_ART_DOES_NOT_EXIST) {
@@ -139,13 +143,17 @@ Adapter::getArticle(MessageHandler& mh)
 {
 	string newsgroup = mh.recvString();
 	string article = mh.recvString();
+	unsigned char test = mh.recvByte(); //buffer out the COM_END
+	if (test != Protocol::COM_END) {
+		exit(1);
+	}
+
 
 	string result = db.getArticle(newsgroup, article);
 	if (result.compare("") == 0) {
 		mh.sendByte(Protocol::ANS_NAK);
 	} else {
 		mh.sendByte(Protocol::ANS_ACK);
-		mh.sendByte(Protocol::PAR_STRING);
 		mh.sendString(result);
 	}
 

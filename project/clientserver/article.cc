@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Article::Article(string author, string text, string title)
+Article::Article(string title, string author, string text)
     : author_{author}
     , text_{text}
     , title_{title}

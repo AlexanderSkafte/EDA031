@@ -216,7 +216,7 @@ listArticles(MessageHandler mh)
 
 	if (resp == Protocol::ANS_NAK) {
 		cout << "Error, either the newsgroup is empty or it does not exist." << endl;
-	} else if (resp == Protocol::ANS_NAK) {
+	} else if (resp == Protocol::ANS_ACK) {
 		unsigned int size = mh.recvInt();
 		for (unsigned int i = 0; i<size; ++i) {
 			cout << mh.recvString() << endl;
@@ -271,10 +271,9 @@ deleteArticle(MessageHandler mh)
 	string art;
 	cin >> art;
 
-	mh.sendByte(Protocol::PAR_STRING);
 	mh.sendString(news_n);
-	mh.sendByte(Protocol::PAR_STRING);
 	mh.sendString(art);
+	mh.sendByte(Protocol::COM_END);
 
 	unsigned char resp = mh.recvByte();
 	if (resp == Protocol::ANS_ACK) {
@@ -286,6 +285,9 @@ deleteArticle(MessageHandler mh)
 	}
 
 	mh.recvByte();
+	cin.clear();
+	cin.ignore();
+
 }
 
 
@@ -299,6 +301,10 @@ getArticle(MessageHandler mh)
 	string title;
 	cin >> title;
 
+	mh.sendString(news_n);
+	mh.sendString(title);
+	mh.sendByte(Protocol::COM_END);
+
 	unsigned char resp = mh.recvByte();
 	if (resp == Protocol::ANS_NAK) {
 		cout << "No such article/newsgroup." << endl;
@@ -308,5 +314,6 @@ getArticle(MessageHandler mh)
 		//error?
 	}
 	mh.recvByte();
-
+	cin.clear();
+	cin.ignore();
 }
