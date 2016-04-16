@@ -4,8 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
-class Article;
+#include "article.h"
 
 class Newsgroup {
 public:
@@ -15,7 +14,7 @@ public:
 	std::string name();
 	std::string getArticle(const std::string& sought_article) const;
 	std::vector<Article> listNewsgroup() const;
-	std::string deleteArticle(std::string article_name);
+	bool		deleteArticle(std::string article_name);
 	void        addArticle(Article a);
 
 private:

@@ -25,7 +25,7 @@ Newsgroup::name()
 	return name_;
 }
 
-string
+string 
 Newsgroup::getArticle(const string& sought_article) const
 {
 	auto itr = find_if(articles_.begin(), articles_.end(),
@@ -33,14 +33,11 @@ Newsgroup::getArticle(const string& sought_article) const
 		return current_article.title() == sought_article;
 	});
 	if (itr != articles_.end()) {
-		string article = itr->title() + "\n"
-			+ itr->author() + "\n"
-			+ itr->text() + "\n";
-		return article;
+		return itr->text();
 	}
 	else {
 		//Probably faulty logic, fix this case
-		return nullptr;
+		return "";
 	}
 }
 
@@ -50,7 +47,7 @@ Newsgroup::listNewsgroup() const
 	return articles_;
 }
 
-string
+bool
 Newsgroup::deleteArticle(string article_name)
 {
 	auto itr = remove_if(articles_.begin(), articles_.end(),
@@ -58,10 +55,10 @@ Newsgroup::deleteArticle(string article_name)
 		return article_name == a.title();
 	});
 	if (itr == articles_.end()) {
-		return "No article by this name to delete error";
+		return false;
 	}
 	articles_.erase(itr, articles_.end());
-	return "Deleted article ";
+	return true;
 }
 
 void

@@ -21,8 +21,8 @@ vector<pair<string, unsigned int>>
 InMemoryDataBase::listNewsgroups()
 {
 	vector<pair<string, unsigned int>> vec;
-	for (auto& ng : hashmap) {
-		vec.push_back(make_pair(ng.second.name(), ng.second.id()));
+	for (auto& ng : newsgroups) {
+		vec.push_back(make_pair(ng.name(), ng.id()));
 	}
 	return vec;
 }
@@ -32,18 +32,21 @@ void
 InMemoryDataBase::addArticle(std::string newsgroup_title, std::string article_name,
 	std::string author, std::string text)
 {
-	auto itr = hashmap.find(newsgroup_title);
+	bool check = false;
 	Article a(article_name, author, text);
-	if (itr == hashmap.end()) {
-		Newsgroup newNG(newsgroup_id, newsgroup_title);
-		newNG.addArticle(a);
-		hashmap.insert(make_pair(newsgroup_title, newNG));
+	for (auto it = newsgroups.begin(); it!= newsgroups.end(); ++it) {
+		if (it->name().compare(newsgroup_title) == 0) {
+			check = true;
+			it->addArticle(a);
+			break;
+		}
 	}
-	else {
-		Newsgroup& thisNG = itr->second;
-		thisNG.addArticle(a);
+	if (!check) {
+		Newsgroup ng(newsgroup_id, newsgroup_title);
+		ng.addArticle(a);
+		newsgroups.push_back(ng);
+
 	}
-	//ska man kolla om artiklen redan finns?
 	++newsgroup_id;
 	
 }
@@ -51,14 +54,21 @@ InMemoryDataBase::addArticle(std::string newsgroup_title, std::string article_na
 int
 InMemoryDataBase::deleteArticle(string newsgroup_title, string article_name)
 {
-	auto itr = hashmap.find(newsgroup_title);
-	if (itr == hashmap.end()) {
+	bool check = false;
+	for (auto it = newsgroups.begin(); it!= newsgroups.end(); ++it) {
+		if (it->name().compare(newsgroup_title) == 0) {
+			if (it->deleteArticle(article_name)) {
+				check = true;
+				break;
+			}
+			
+		}
+	}
+	if (!check) {
 		//return error msg in protocol
 		return Protocol::ERR_ART_DOES_NOT_EXIST;
 	}
 	else {
-		Newsgroup thisNG = itr->second;
-		thisNG.deleteArticle(article_name);
 		return Protocol::ANS_ACK;
 	}
 }
@@ -66,14 +76,21 @@ InMemoryDataBase::deleteArticle(string newsgroup_title, string article_name)
 int
 InMemoryDataBase::addNewsgroup(string newsgroup_title)
 {
-	if (hashmap.find(newsgroup_title) != hashmap.end()) {
+	bool check = false;
+	for (auto it = newsgroups.begin(); it!= newsgroups.end(); ++it) {
+		if (it->name().compare(newsgroup_title) == 0) {
+			check = true;
+			break;
+		}
+	}
+	if (check) {
 		//return error msg in protocol
 		return Protocol::ERR_NG_ALREADY_EXISTS;
 	}
 	else {
-		Newsgroup newNG(newsgroup_id, newsgroup_title);
+		Newsgroup ng(newsgroup_id, newsgroup_title);
 		++newsgroup_id;
-		hashmap.insert(make_pair(newsgroup_title, newNG));
+		newsgroups.push_back(ng);
 		return Protocol::ERR_NG_DOES_NOT_EXIST;
 	}
 }
@@ -81,13 +98,20 @@ InMemoryDataBase::addNewsgroup(string newsgroup_title)
 int
 InMemoryDataBase::deleteNewsgroup(string newsgroup_title)
 {
-	auto itr = hashmap.find(newsgroup_title);
-	if (itr == hashmap.end()) {
+	
+	bool check = false;
+	for (auto it = newsgroups.begin(); it!= newsgroups.end(); ++it) {
+		if (it->name().compare(newsgroup_title) == 0) {
+			check = true;
+			newsgroups.erase(it);
+			break;
+		}
+	}
+	if (!check) {
 		//return error msg in protocol
 		return Protocol::ERR_NG_DOES_NOT_EXIST;
 	}
 	else {
-		hashmap.erase(itr);
 		return Protocol::ANS_ACK;
 	}
 }
@@ -95,29 +119,26 @@ InMemoryDataBase::deleteNewsgroup(string newsgroup_title)
 string
 InMemoryDataBase::getArticle(string newsgroup_title, string article_name)
 {
-	auto itr = hashmap.find(newsgroup_title);
-	if (itr == hashmap.end()) {
-		//return error msg in protocol
-		return "";
+	for (auto it = newsgroups.begin(); it!= newsgroups.end(); ++it) {
+		if (it->name().compare(newsgroup_title) == 0) {
+			string text = it->getArticle(article_name);
+			if (text.compare("") != 0) {
+				return text;
+			} 
+		}
 	}
-	else {
-		Newsgroup thisNG = itr->second;
-		string msg = thisNG.getArticle(article_name);
-		return msg;
-	}
+	return "";
 }
 
 vector<Article>
 InMemoryDataBase::getArticles(string newsgroup_title)
 {
 	vector<Article> vec;
-	auto itr = hashmap.find(newsgroup_title);
-	if (itr == hashmap.end()) {
-		//return error msg in protocol
-		return vec;
+	for (auto it = newsgroups.begin(); it!= newsgroups.end(); ++it) {
+		if (it->name().compare(newsgroup_title) == 0) {
+			vec = it->listNewsgroup();
+			return vec;
+		}
 	}
-	else {
-		vec = itr->second.listNewsgroup();
-		return vec;
-	}
+	return vec;
 }

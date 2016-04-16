@@ -52,7 +52,7 @@ public:
 
 
 private:
-	std::map<std::string, Newsgroup> hashmap;
+	std::vector<Newsgroup> newsgroups;
 	int newsgroup_id;
 	int article_id;
 };

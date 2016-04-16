@@ -5,6 +5,7 @@
 #include "client.h"
 #include "protocol.h"
 #include "messagehandler.h"
+#include <map>
 #include "connectionclosedexception.h"
 
 using namespace std;
@@ -20,6 +21,26 @@ void    createArticle   (MessageHandler mh);
 void    deleteArticle   (MessageHandler mh);
 void    getArticle      (MessageHandler mh);
 void 	sendCommand		(MessageHandler mh, int command);
+map<int, string> options = {
+    {Protocol::COM_LIST_NG,    "List newsgroups"},
+    {Protocol::COM_CREATE_NG,  "Create newsgroups"},
+    {Protocol::COM_DELETE_NG,  "Delete newsgroup"},
+    {Protocol::COM_LIST_ART,   "List articles in a newsgroup"},
+    {Protocol::COM_CREATE_ART, "Write article"},
+    {Protocol::COM_DELETE_ART, "Delete Article"},
+    {Protocol::COM_GET_ART,    "Read articles in a newsgroup"}
+};
+
+void
+menu()
+{
+    cout << "Options:\n" << endl;
+    for (const auto& entry : options) {
+        cout << entry.first << ": " << entry.second << "\n";
+    }
+    cout << endl;
+}
+
 
 int
 main(int argc, char* argv[])
@@ -52,6 +73,7 @@ main(int argc, char* argv[])
 	MessageHandler mh(ptr);
 	try {
 		string line;
+		menu();
 		// print alternativen
 		while (getline(cin, line)) {
 			//print alternativen
@@ -96,7 +118,7 @@ main(int argc, char* argv[])
 				break;
 			}
 
-
+			menu();
 		}
 	} catch (ConnectionClosedException&) {
 		cout << "The server is not responding." << endl;
@@ -134,7 +156,7 @@ listNewsgroups(MessageHandler mh)
 	}
 	//buffer ANS_END
 	while (mh.recvByte() != Protocol::ANS_END) {
-
+		cout << "en gång?" << endl;
 	}
 }
 
