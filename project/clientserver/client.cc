@@ -149,7 +149,6 @@ listNewsgroups(MessageHandler mh)
 		cout << "No newsgroups are created yet." << endl;
 	} else if (c == Protocol::ANS_LIST_NG) {
 		int s = mh.recvInt();
-		cout << "Vad är s? : " << s << endl;
 		for (unsigned int i = 0; i<s; ++i) {
 			cout << mh.recvString() <<  endl;//" " << mh.recvInt() << endl;
 		}
@@ -168,7 +167,6 @@ createNewsgroup(MessageHandler mh)
 	cin >> name;
 	mh.sendString(name);
 	mh.sendByte(Protocol::COM_END);
-	cin.clear();
 	unsigned int resp = mh.recvByte();
 	if (resp ==Protocol::ANS_ACK) {
 		cout << "The newsgroup was added to the database." << endl;;
@@ -188,8 +186,8 @@ deleteNewsgroup(MessageHandler mh)
 	cout << "Name of the new Newsgroup?" << endl;
 	string name;
 	cin >> name;
-	mh.sendByte(Protocol::PAR_STRING);
 	mh.sendString(name);
+	mh.sendByte(Protocol::COM_END);
 
 	unsigned char resp = mh.recvByte();
 	if (resp == Protocol::ANS_ACK) {
@@ -201,6 +199,8 @@ deleteNewsgroup(MessageHandler mh)
 	}
 
 	mh.recvByte();
+	cin.clear();
+	cin.ignore();
 }
 
 void
@@ -209,20 +209,22 @@ listArticles(MessageHandler mh)
 	cout << "Name of the Newsgroup?" << endl;
 	string name;
 	cin >> name;
-	mh.sendByte(Protocol::PAR_STRING);
 	mh.sendString(name);
+	mh.sendByte(Protocol::COM_END);
 
 	unsigned char resp = mh.recvByte();
-	unsigned int size = mh.recvInt();
 
 	if (resp == Protocol::ANS_NAK) {
 		cout << "Error, either the newsgroup is empty or it does not exist." << endl;
 	} else if (resp == Protocol::ANS_NAK) {
+		unsigned int size = mh.recvInt();
 		for (unsigned int i = 0; i<size; ++i) {
-			cout << mh.recvString() << " " << mh.recvInt() << endl;
+			cout << mh.recvString() << endl;
 		}
 	}
 	mh.recvByte();
+	cin.clear();
+	cin.ignore();
 }
 
 void
@@ -241,25 +243,22 @@ createArticle(MessageHandler mh)
 	string text;
 	cin >> text;
 
-	mh.sendByte(Protocol::PAR_STRING);
 	mh.sendString(news_n);
-	mh.sendByte(Protocol::PAR_STRING);
 	mh.sendString(title);
-	mh.sendByte(Protocol::PAR_STRING);
 	mh.sendString(aut);
-	mh.sendByte(Protocol::PAR_STRING);
 	mh.sendString(text);
+	mh.sendByte(Protocol::COM_END);
 
 	unsigned char resp = mh.recvByte();
 	if (resp == Protocol::ANS_ACK) {
 		cout << "Article was created." << endl;
-	} else if (resp == Protocol::ANS_NAK) {
-		cout << "Article and Newsgroup was created." << endl;
 	} else {
 		//error?
 	}
 
 	mh.recvByte();
+	cin.clear();
+	cin.ignore();
 }
 
 void

@@ -12,25 +12,6 @@
 #include <cstdlib>
 
 using namespace std;
-map<int, string> options = {
-    {Protocol::COM_LIST_NG,    "List newsgroups"},
-    {Protocol::COM_CREATE_NG,  "Create newsgroups"},
-    {Protocol::COM_DELETE_NG,  "Delete newsgroup"},
-    {Protocol::COM_LIST_ART,   "List articles in a newsgroup"},
-    {Protocol::COM_CREATE_ART, "Write article"},
-    {Protocol::COM_DELETE_ART, "Delete Article"},
-    {Protocol::COM_GET_ART,    "Read articles in a newsgroup"}
-};
-
-void
-menu()
-{
-    cout << "Options:\n" << endl;
-    for (const auto& entry : options) {
-        cout << entry.first << ": " << entry.second << "\n";
-    }
-    cout << endl;
-}
 
 int main(int argc, char* argv[])
 {
