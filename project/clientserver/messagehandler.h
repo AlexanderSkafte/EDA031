@@ -1,14 +1,16 @@
 #ifndef MESSAGE_HANDLER_H
 #define MESSAGE_HANDLER_H
 
+#include "connection.h"
 #include <string>
+#include <memory>
 
 class MessageHandler {
 public:
-	MessageHandler(Connection& conn);
+	MessageHandler(std::shared_ptr<Connection>&);
 	int 			readCode	();
 	void			sendByte	(unsigned char);
-	void			sendNbr		(int value);
+	void			sendInt		(int value);
 	void			sendString	(const std::string& str);
 	int				recvInt		();
 	int				recvByte	();

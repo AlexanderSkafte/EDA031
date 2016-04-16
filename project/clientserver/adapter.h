@@ -1,9 +1,10 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include "messagehandler.h"
 #include "in_memory_data_base.h"
+#include "protocol.h"
 
-class MessageHandler;
 
 class Adapter {
 public:

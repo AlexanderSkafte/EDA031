@@ -1,4 +1,5 @@
-#include "Protocol.h"
+#include "user.h"
+#include "protocol.h"
 
 int main(int argc, char* argv[]) {
 	if (argc != 3) {

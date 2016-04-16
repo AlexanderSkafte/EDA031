@@ -33,18 +33,19 @@ void writeString(const shared_ptr<Connection>& conn, const string& s) {
 }
 
 int main(int argc, char* argv[]){
-	if (argc != 2) {
+	if (argc != 3) {
 		cerr << "Usage: myserver port-number" << endl;
 		exit(1);
 	}
 	
 	int port = -1;
 	try {
-		port = stoi(argv[1]);
+		port = stoi(argv[2]);
 	} catch (exception& e) {
 		cerr << "Wrong port number. " << e.what() << endl;
 		exit(1);
 	}
+	cout << port << " potatis " << endl;
 	
 	Server server(port);
 	if (!server.isReady()) {

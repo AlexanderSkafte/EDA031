@@ -1,13 +1,13 @@
 #include <string>
-
+#include <memory>
 #include "messagehandler.h"
-#include "protocol.h";
+#include "protocol.h"
+#include "connection.h"
+#include "connectionclosedexception.h"
 
 using namespace std;
 
-MessageHandler::MessageHandler(std::shared_ptr<Connection>& conn)
-    : conn_{conn}
-{ }
+MessageHandler::MessageHandler(shared_ptr<Connection>& conn) : conn_(conn) {}
 
 void
 MessageHandler::sendByte(unsigned char b) // throws ConnectionClosedException
@@ -20,7 +20,7 @@ MessageHandler::sendByte(unsigned char b) // throws ConnectionClosedException
 }
 
 void
-MessageHandler::sendNbr(int value) // throws ConnectionClosedException
+MessageHandler::sendInt(int value) // throws ConnectionClosedException
 {
 	unsigned char b = (value >> 24);
 	sendByte(b);
@@ -32,17 +32,17 @@ MessageHandler::sendNbr(int value) // throws ConnectionClosedException
 }
 
 void
-MessageHandler::sendString(const String& str)
+MessageHandler::sendString(const string& str)
 {
 	sendByte(Protocol::PAR_STRING);
 	sendInt(str.size());
 	for (unsigned int i = 0; i < str.size(); ++i) {
-		sendByte(s[i]);
+		sendByte(str[i]);
 	}
 }
 
 int
-MessageHandler::recvInt() throws ConnectionClosedException
+MessageHandler::recvInt() //throws ConnectionClosedException
 {
 	unsigned char byte1 = recvByte();
 	unsigned char byte2 = recvByte();
@@ -55,10 +55,7 @@ MessageHandler::recvInt() throws ConnectionClosedException
 int
 MessageHandler::recvByte() // throws ConnectionClosedException
 {
-	int code = conn_.read();
-	if (code == Connection.CONNECTION_CLOSED) {
-		throw new ConnectionClosedException();
-	}
+	int code = conn_->read();	
 	return code;
 }
 
@@ -68,7 +65,6 @@ MessageHandler::recvString()
 	int par = recvByte();
 	string str = "";
 	if (par != Protocol::PAR_STRING) {
-		prinf("Wrong format, not string. exiting");
 		exit(1);
 	} else {
 		int n = recvInt();

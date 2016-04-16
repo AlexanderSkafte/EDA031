@@ -2,55 +2,57 @@
 #define IN_MEMORY_DATA_BASE_H
 
 #include <iostream>
-#include <string>
 #include <unordered_map>
 #include <vector>
+#include <list>
+#include <map>
 
+#include "article.h"
+#include "newsgroup.h"
 #include "database.h"
-#include "protocol.h"
 
-class Newsgroup;
-class Article;
 
 class InMemoryDataBase : public DataBase {
 public:
 	InMemoryDataBase();
 	~InMemoryDataBase();
 
-    std::vector<std::pair<std::string, unsigned int>>
+	std::vector<std::pair<std::string, unsigned int>>
 		listNewsgroups();
 
 	int
-		createNewsgroup(
-			const std::string& newsgroup_name);
+		addNewsgroup(
+			std::string);
 
 	int
 		deleteNewsgroup(
-			const std::string& newsgroup_name);
+			std::string newsgroup_title);
+
 
 	std::vector<Article>
-		listArticles(
-			const std::string& newsgroup_name);
+		getArticles(
+			std::string newsgroup_title);
 
 	void
-		createArticle(
-			const std::string& newsgroup_name,
-			const std::string& article_title,
-			const std::string& author,
-			const std::string& text);
+		addArticle(
+			std::string newsgroup_title, std::string article_name,
+			std::string author, std::string text);
 
 	int
 		deleteArticle(
-			const std::string& newsgroup_name,
-			const std::string& article_title);
+			std::string newsgroup_title,
+			std::string article_name);
+
+
 
 	std::string
 		getArticle(
-			const std::string& newsgroup_name,
-			const std::string& article_title);
+			std::string newsgroup_title,
+			std::string article_name);
+
 
 private:
-	std::unordered_map<std::string, Newsgroup> hashmap;
+	std::map<std::string, Newsgroup> hashmap;
 	int newsgroup_id;
 	int article_id;
 };

@@ -27,7 +27,10 @@ int main()
 	newsgroup.addArticle(a2);
 	cout << "Adding successful!" << endl << endl;
 	cout << "Newsgroup list: " << endl;
-	//cout << newsgroup.listNewsgroup() << endl;
+	vector<Article> vec = newsgroup.listNewsgroup();
+	for (auto i = vec.begin(); i<vec.end(); ++i) {
+		cout <<  i->author() << " " << i->text() << endl;
+	}
 	cout << "Testing delete function..." << endl;
 	newsgroup.deleteArticle("Title 2");
 	cout << "Delete function successful" << endl;

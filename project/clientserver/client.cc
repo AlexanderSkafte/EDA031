@@ -1,5 +1,24 @@
+#include "connection.h"
+#include <iostream>
+#include <memory>
+#include <sstream>
 #include "client.h"
 #include "protocol.h"
+#include "messagehandler.h"
+#include "connectionclosedexception.h"
+
+using namespace std;
+
+
+//Varför måste dem vara här Alexander?
+int 	parse_command	(std::string line);
+void    listNewsgroups  (MessageHandler mh);
+void    createNewsgroup (MessageHandler mh);
+void    deleteNewsgroup (MessageHandler mh);
+void    listArticles    (MessageHandler mh);
+void    createArticle   (MessageHandler mh);
+void    deleteArticle   (MessageHandler mh);
+void    getArticle      (MessageHandler mh);
 
 int
 main(int argc, char* argv[])
@@ -20,15 +39,15 @@ main(int argc, char* argv[])
 
 
 	Connection conn(argv[1], port);
-
-	if (!conn.isConnected()) {
+	auto ptr = shared_ptr<Connection>(&conn);
+	if (!ptr->isConnected()) {
+		cout << port << endl;
 		cerr << "Connection failed." << endl;
 		exit(1);
 	}
 
 	cout << "Connection established." <<endl;
 
-	auto ptr = shared_ptr<Connection>(&conn);
 	MessageHandler mh(ptr);
 	try {
 		string line;
@@ -56,15 +75,15 @@ main(int argc, char* argv[])
 				break;
 
 			case Protocol::COM_CREATE_ART:
-				createArticles(mh);
+				createArticle(mh);
 				break;
 
 			case Protocol::COM_DELETE_ART:
-				deleteArticles(mh);
+				deleteArticle(mh);
 				break;
 
 			case Protocol::COM_GET_ART:
-				getArticlesicles(mh);
+				getArticle(mh);
 				break;
 
 			case Protocol::COM_END:
@@ -85,7 +104,7 @@ main(int argc, char* argv[])
 }
 
 int
-Client::parse_command(string line)
+parse_command(string line)
 {
 	stringstream ss(line);
 	int command;
@@ -99,7 +118,7 @@ Client::parse_command(string line)
 }
 
 void
-Client::listNewsgroups(MessageHandler mh)
+listNewsgroups(MessageHandler mh)
 {
 	unsigned char c = mh.recvByte();
 	if (c == Protocol::ANS_NAK) {
@@ -115,7 +134,7 @@ Client::listNewsgroups(MessageHandler mh)
 }
 
 void
-Client::createNewsgroup(MessageHandler mh)
+createNewsgroup(MessageHandler mh)
 {
 	cout << "Name of the new Newsgroup?" << endl;
 	string name;
@@ -134,7 +153,7 @@ Client::createNewsgroup(MessageHandler mh)
 }
 
 void
-Client::deleteNewsgroup(MessageHandler mh)
+deleteNewsgroup(MessageHandler mh)
 {
 	cout << "Name of the new Newsgroup?" << endl;
 	string name;
@@ -155,7 +174,7 @@ Client::deleteNewsgroup(MessageHandler mh)
 }
 
 void
-Client::listArticles(MessageHandler mh)
+listArticles(MessageHandler mh)
 {
 	cout << "Name of the Newsgroup?" << endl;
 	string name;
@@ -177,7 +196,7 @@ Client::listArticles(MessageHandler mh)
 }
 
 void
-Client::createArticle(MessageHandler mh)
+createArticle(MessageHandler mh)
 {
 	cout << "Name of the new Newsgroup?" << endl;
 	string news_n;
@@ -214,7 +233,7 @@ Client::createArticle(MessageHandler mh)
 }
 
 void
-Client::deleteArticle(MessageHandler mh)
+deleteArticle(MessageHandler mh)
 {
 	cout << "Name of the Newsgroup?" << endl;
 	string news_n;
@@ -242,7 +261,7 @@ Client::deleteArticle(MessageHandler mh)
 
 
 void
-Client::getArticle(MessageHandler mh)
+getArticle(MessageHandler mh)
 {
 	cout << "Name of the Newsgroup?" << endl;
 	string news_n;

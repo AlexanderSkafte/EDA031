@@ -45,7 +45,7 @@ InMemoryDataBase::addArticle(std::string newsgroup_title, std::string article_na
 	}
 	//ska man kolla om artiklen redan finns?
 	++newsgroup_id;
-	//return Protocol::ERR_ART_DOES_NOT_EXIST;
+	
 }
 
 int

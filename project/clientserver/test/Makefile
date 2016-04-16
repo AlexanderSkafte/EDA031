@@ -16,7 +16,7 @@ LDFLAGS   = -g -L..
 #LDFLAGS +=  -stdlib=libc++
 
 # Libraries
-LDLIBS = -lclientserver
+#LDLIBS = -lclientserver
 
 # Targets
 PROGS = myserver myclient
@@ -25,8 +25,8 @@ all: $(PROGS)
 
 # Targets rely on implicit rules for compiling and linking
 # The dependency on libclientserver.a is not defined.
-myserver: myserver.o  
-myclient: myclient.o
+myserver: myserver.o connection.o server.o
+myclient: myclient.o connection.o server.o
 
 # Phony targets
 .PHONY: all clean

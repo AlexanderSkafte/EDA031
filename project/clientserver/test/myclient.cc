@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
 	int port = -1;
 	try {
 		port = stoi(argv[2]);
+		cout << port << endl;
 	} catch (exception& e) {
 		cerr << "Wrong port number. " << e.what() << endl;
 		exit(1);

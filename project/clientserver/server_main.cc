@@ -3,6 +3,7 @@
 #include "connectionclosedexception.h"
 #include "protocol.h"
 #include "server.h"
+#include "messagehandler.h"
 #include <map>
 #include <memory>
 #include <iostream>
@@ -11,31 +12,31 @@
 #include <cstdlib>
 
 using namespace std;
-
 map<int, string> options = {
     {Protocol::COM_LIST_NG,    "List newsgroups"},
     {Protocol::COM_CREATE_NG,  "Create newsgroups"},
     {Protocol::COM_DELETE_NG,  "Delete newsgroup"},
-    {Protocol::COM_LIST_ART:   "List articles in a newsgroup"},
+    {Protocol::COM_LIST_ART,   "List articles in a newsgroup"},
     {Protocol::COM_CREATE_ART, "Write article"},
     {Protocol::COM_DELETE_ART, "Delete Article"},
-    {Protocol::COM_GET_ART,    "Read articles in a newsgroup"},
+    {Protocol::COM_GET_ART,    "Read articles in a newsgroup"}
 };
 
 void
 menu()
 {
-    cout << "Options:\n"
+    cout << "Options:\n" << endl;
     for (const auto& entry : options) {
-        cout << entry.first << ": " << entry.second << "\n"
+        cout << entry.first << ": " << entry.second << "\n";
     }
     cout << endl;
 }
 
 int main(int argc, char* argv[])
 {
-	if (argc != 2 || argc != 3) {
+	if (argc != 2 && argc != 3) {
 		cerr << "Usage: server_main host-name port-number" << endl;
+		cout << argc << endl;
 		exit(1);
 	}
 
@@ -47,12 +48,12 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-	Connection conn(argv[1], port);
-	if (!conn.isConnected()) {
-		cerr << "Connection attempt failed." << endl;
-		exit(1);
-	}
 
+	Server server(port);
+	if (!server.isReady()) {
+		cerr << "Wrong port." << endl;
+		exit(1); 
+	}
 	Adapter adapter;
 
 	cout << "Server running" << endl;
@@ -67,7 +68,7 @@ int main(int argc, char* argv[])
 				switch (ch) {
 
 		        case Protocol::COM_LIST_NG:
-		            adapter.listNewsgroups();
+		            adapter.listNewsgroups(mh);
 		            break;
 
 		        case Protocol::COM_CREATE_NG:
@@ -83,7 +84,7 @@ int main(int argc, char* argv[])
 		            break;
 
 		        case Protocol::COM_GET_ART:
-		            adapter.readArticle(mh);
+		            adapter.getArticle(mh);
 		            break;
 
 		        case Protocol::COM_CREATE_ART:
@@ -95,7 +96,7 @@ int main(int argc, char* argv[])
 		            break;
 
 		        default:
-		            cerror << "Choice does not exist." << endl;
+		            cerr << "Choice does not exist." << endl;
 		            exit(1);
 		        }
 	    	} catch (ConnectionClosedException&) {
