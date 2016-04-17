@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <stdio.h>
+#include <fstream>
 
 #include "database.h"
 #include "article.h"
