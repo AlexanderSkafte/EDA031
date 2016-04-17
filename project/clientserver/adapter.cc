@@ -21,16 +21,12 @@ Adapter::listNewsgroups(MessageHandler& mh)
     	//error
     	exit(1);
     }
-    if (vec.empty()) {
-    	mh.sendByte(Protocol::ANS_NAK);
-    } else {
-    	mh.sendByte(Protocol::ANS_LIST_NG);
-    	mh.sendInt(vec.size());
-	    for (pair<string, unsigned int> p : vec) {
-	    	mh.sendString(p.first);
-	    	//mh.sendInt(p.second);
-	    }
-	}
+	mh.sendByte(Protocol::ANS_LIST_NG);
+	mh.sendInt(vec.size());
+    for (pair<string, unsigned int> p : vec) {
+    	mh.sendString(p.first);
+    	mh.sendInt(p.second);
+    }
     mh.sendByte(Protocol::ANS_END);
 }
 
@@ -49,7 +45,7 @@ Adapter::createNewsgroup(MessageHandler& mh)
 	} else if (resp == Protocol::ERR_NG_ALREADY_EXISTS) {
 		mh.sendByte(Protocol::ANS_NAK);
 	} else {
-        cout << "Exception kanske?" << endl;
+		//error
 	}
 
     mh.sendByte(Protocol::ANS_END);
@@ -73,7 +69,7 @@ Adapter::deleteNewsgroup(MessageHandler& mh)
 	} else if (resp == Protocol::ANS_ACK) {
 		mh.sendByte(Protocol::ANS_ACK);
 	} else {
-        cout << "Exception kanske?" << endl;
+       	//error
 	}
 
     mh.sendByte(Protocol::ANS_END);

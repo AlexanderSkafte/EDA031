@@ -28,7 +28,8 @@ map<int, string> options = {
     {Protocol::COM_LIST_ART,   "List articles in a newsgroup"},
     {Protocol::COM_CREATE_ART, "Write article"},
     {Protocol::COM_DELETE_ART, "Delete Article"},
-    {Protocol::COM_GET_ART,    "Read articles in a newsgroup"}
+    {Protocol::COM_GET_ART,    "Read articles in a newsgroup"},
+    {Protocol::COM_END,		   "Exit program"}
 };
 
 void
@@ -36,7 +37,7 @@ menu()
 {
     cout << "Options:\n" << endl;
     for (const auto& entry : options) {
-        cout << entry.first << ": " << entry.second << "\n";
+        cout << entry.first << ": " << entry.second << endl;
     }
     cout << endl;
 }
@@ -74,9 +75,8 @@ main(int argc, char* argv[])
 	try {
 		string line;
 		menu();
-		// print alternativen
 		while (getline(cin, line)) {
-			//print alternativen
+
 			int command = parse_command(line);
 			mh.sendByte(command);
 			switch (command) {
@@ -150,12 +150,13 @@ listNewsgroups(MessageHandler mh)
 	} else if (c == Protocol::ANS_LIST_NG) {
 		int s = mh.recvInt();
 		for (unsigned int i = 0; i<s; ++i) {
-			cout << mh.recvString() <<  endl;//" " << mh.recvInt() << endl;
+			cout << mh.recvString();
+			cout << mh.recvInt() << endl;//" " << mh.recvInt() << endl;
 		}
 	}
 	//buffer ANS_END
-	while (mh.recvByte() != Protocol::ANS_END) {
-		cout << "en gång?" << endl;
+	if (mh.recvByte() != Protocol::ANS_END) {
+		//error
 	}
 }
 
@@ -173,9 +174,12 @@ createNewsgroup(MessageHandler mh)
 	} else if (resp == Protocol::ANS_NAK) {
 		cout << "The newsgroup already existed." << endl;
 	} else {
-		cout << "kom jag hit?" << endl;
+		//error
 	}
-	mh.recvByte();
+	
+	if (mh.recvByte() != Protocol::ANS_END) {
+		//error
+	}
 	cin.clear();
 	cin.ignore();
 }
@@ -198,7 +202,9 @@ deleteNewsgroup(MessageHandler mh)
 		//error?
 	}
 
-	mh.recvByte();
+	if (mh.recvByte() != Protocol::ANS_END) {
+		//error
+	}
 	cin.clear();
 	cin.ignore();
 }
@@ -222,7 +228,11 @@ listArticles(MessageHandler mh)
 			cout << mh.recvString() << endl;
 		}
 	}
-	mh.recvByte();
+	
+	if (mh.recvByte() != Protocol::ANS_END) {
+		//error
+	}
+
 	cin.clear();
 	cin.ignore();
 }
@@ -256,7 +266,9 @@ createArticle(MessageHandler mh)
 		//error?
 	}
 
-	mh.recvByte();
+	if (mh.recvByte() != Protocol::ANS_END) {
+		//error
+	}
 	cin.clear();
 	cin.ignore();
 }
@@ -284,7 +296,10 @@ deleteArticle(MessageHandler mh)
 		//error?
 	}
 
-	mh.recvByte();
+	if (mh.recvByte() != Protocol::ANS_END) {
+		//error
+	}
+
 	cin.clear();
 	cin.ignore();
 
@@ -313,7 +328,11 @@ getArticle(MessageHandler mh)
 	} else {
 		//error?
 	}
-	mh.recvByte();
+	
+	if (mh.recvByte() != Protocol::ANS_END) {
+		//error
+	}
+
 	cin.clear();
 	cin.ignore();
 }
