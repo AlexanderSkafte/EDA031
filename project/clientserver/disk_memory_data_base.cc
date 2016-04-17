@@ -10,6 +10,7 @@
 #include "article.h"
 #include "newsgroup.h"
 #include "disk_memory_data_base.h"
+#include "protocol.h"
 
 using namespace std;
 
@@ -94,7 +95,7 @@ DiskMemoryDataBase::addNewsgroup(
     
     if (itr == newsgroups.end()) {
         string newsgroup_path = root_directory_path + "/" + newsgroup_title;
-        int status = mkdir(newsgroup_path, S_IRWXU);
+        int status = mkdir(newsgroup_path.c_str(), S_IRWXU);
         if (status != 0) {
             cout << "Error(" << errno << ") creating " << newsgroup_path << endl;
             //Borde returnera ett error här. Vet dock inte vad det skulle vara...
@@ -112,12 +113,12 @@ int
 DiskMemoryDataBase::deleteNewsgroup(
                 string newsgroup_title)
 {
-    for (auto itr = newsgroupsbegin(); itr != newsgroups.end(); ++itr) {
-        if (itr->name == newsgroup_title) {
-            string newsgroup_path = root_directory_path + "/" + itr->name;
+    for (auto itr = newsgroups.begin(); itr != newsgroups.end(); ++itr) {
+        if (itr->name() == newsgroup_title) {
+            string newsgroup_path = root_directory_path + "/" + itr->name();
             remove(newsgroup_path.c_str());
             newsgroups.erase(itr);
-            return Protocol::ANS_ACK
+            return Protocol::ANS_ACK;
         }
     }
     return Protocol::ERR_NG_DOES_NOT_EXIST;
@@ -128,7 +129,7 @@ DiskMemoryDataBase::getArticles(
             string newsgroup_title)
 {
     vector<Article> vec;
-    for (const auto& newsgroup : newsgroups) {
+    for (Newsgroup newsgroup : newsgroups) {
         if (newsgroup.name() == newsgroup_title) {
             vec = newsgroup.listNewsgroup();
             return vec;
@@ -163,7 +164,7 @@ DiskMemoryDataBase::addArticle(
     string newsgroup_path = root_directory_path + "/" + newsgroup_title;
     ofstream article_file;
     article_file.open(newsgroup_path + "/" + article_name);
-    article_file << article_id + "\n";
+    article_file << article_id << "\n";
     article_file << author + "\n";
     article_file << text;
     ++article_id;
