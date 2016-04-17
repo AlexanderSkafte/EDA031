@@ -64,7 +64,7 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
             while (getline(article_stream, line)) {
                 article_text += line + "\n";
             }
-            Article article(article_id, article_author, article_text, article_title);
+            Article article(article_title, article_author, article_text);
             article_stream.close();
             newsgroup.addArticle(article);
         }
@@ -146,7 +146,7 @@ DiskMemoryDataBase::addArticle(
            string text)
 {
     
-    Article article(article_id, author, text, article_name);
+    Article article(article_name, author, text);
     auto itr = find_if(newsgroups.begin(), newsgroups.end(),
                        [newsgroup_title](Newsgroup ng) {
                            return ng.name() == newsgroup_title;
