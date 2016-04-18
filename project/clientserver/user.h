@@ -1,7 +1,0 @@
-
-class user {
-public:
-
-private:
-
-}

@@ -2,6 +2,7 @@
 
 #include "adapter.h"
 #include "connection.h"
+#include "protocol.h"
 #include <iostream>
 #include <string>
 #include <map>
