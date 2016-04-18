@@ -54,8 +54,8 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
     
     while ((root_dirp = readdir(root_dp)) != NULL) {
         //Create newsgroup object from directory
-        if (!strcmp(root_dirp->d_name, ".") ||
-            !strcmp(root_dirp->d_name, "..") ||
+        if (!strcmp(root_dirp->d_name, ".")         ||
+            !strcmp(root_dirp->d_name, "..")        ||
             !strcmp(root_dirp->d_name, ".DS_Store") ||
             !strcmp(root_dirp->d_name, "init_file")) {
             continue;
@@ -226,6 +226,7 @@ DiskMemoryDataBase::deleteArticle(
                        });
     if (newsgroup_itr != newsgroups.end()) {
         vector<Article> article_vec = newsgroup_itr->listNewsgroup();
+        
         auto itr = find_if(article_vec.begin(), article_vec.end(),
                            [article_name](Article a) {
                                return article_name == a.title();
@@ -239,6 +240,7 @@ DiskMemoryDataBase::deleteArticle(
             string article_path = root_directory_path + "/" + newsgroup_id_string.str() + "_" +
                                     newsgroup_itr->name() + "/" + article_id_string.str() + "_" +
                                     article_name;
+            
             newsgroup_itr->deleteArticle(article_name);
             remove(article_path.c_str());
             return Protocol::ANS_ACK;
