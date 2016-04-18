@@ -28,7 +28,7 @@ all: $(PROGS)
 #TestDNA: TestDNA.o in_memory_data_base.o newsgroup.o article.o connection.o messagehandler.o 
 client: client.o in_memory_data_base.o newsgroup.o article.o connection.o messagehandler.o server.o connection.o
 server_main: in_memory_data_base.o newsgroup.o article.o connection.o messagehandler.o  server_main.o adapter.o server.o connection.o 
-server_disk: adapter_disk.o in_memory_data_base.o newsgroup.o article.o connection.o messagehandler.o  server_disk.o server.o connection.o
+server_disk: adapter_disk.o disk_memory_data_base.o newsgroup.o article.o connection.o messagehandler.o server_disk.o server.o connection.o
 testDisk: testDisk.o disk_memory_data_base.o newsgroup.o article.o connection.o messagehandler.o
 # Phony targets
 .PHONY: all clean

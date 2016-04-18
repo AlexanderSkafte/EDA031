@@ -7,7 +7,6 @@
 class AdapterDisk {
 public:
     AdapterDisk                 (const std::string&);
-    ~AdapterDisk();
     void listNewsgroups     (MessageHandler& mh);
     void createNewsgroup    (MessageHandler& mh);
     void deleteNewsgroup    (MessageHandler& mh);

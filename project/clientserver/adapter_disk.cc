@@ -1,11 +1,12 @@
 #include <iostream>
-
+#include "disk_memory_data_base.h"
 #include "adapter_disk.h"
 #include "connection.h"
 #include "protocol.h"
 #include <iostream>
 #include <string>
 #include <map>
+#include "database.h"
 
 using namespace std;
 
@@ -13,9 +14,6 @@ AdapterDisk::AdapterDisk(const std::string& line) : db(line)
 {
 }
 
-AdapterDisk::~AdapterDisk() {
-	
-}
 
 void
 AdapterDisk::listNewsgroups(MessageHandler& mh)
