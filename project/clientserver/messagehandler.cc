@@ -35,6 +35,7 @@ MessageHandler::sendInt(int value) // throws ConnectionClosedException
 void
 MessageHandler::sendString(string str)
 {
+	
 	sendByte(Protocol::PAR_STRING);
 	sendInt(str.size());
 	for (char c : str) {

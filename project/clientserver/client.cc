@@ -150,7 +150,7 @@ listNewsgroups(MessageHandler mh)
 	} else if (c == Protocol::ANS_LIST_NG) {
 		int s = mh.recvInt();
 		for (unsigned int i = 0; i<s; ++i) {
-			cout << mh.recvString();
+			cout << mh.recvString() << " ";
 			cout << mh.recvInt() << endl;//" " << mh.recvInt() << endl;
 		}
 	}
@@ -164,15 +164,15 @@ void
 createNewsgroup(MessageHandler mh)
 {
 	cout << "Name of the new Newsgroup?" << endl;
-	string name;
-	cin >> name;
-	mh.sendString(name);
+	string newsgroup_name;
+	getline(cin, newsgroup_name);
+	mh.sendString(newsgroup_name);
 	mh.sendByte(Protocol::COM_END);
 	unsigned int resp = mh.recvByte();
 	if (resp ==Protocol::ANS_ACK) {
 		cout << "The newsgroup was added to the database." << endl;;
 	} else if (resp == Protocol::ANS_NAK) {
-		cout << "The newsgroup already existed." << endl;
+		cout << "The newsgroup already exist." << endl;
 	} else {
 		//error
 	}
@@ -180,17 +180,16 @@ createNewsgroup(MessageHandler mh)
 	if (mh.recvByte() != Protocol::ANS_END) {
 		//error
 	}
-	cin.clear();
-	cin.ignore();
+
 }
 
 void
 deleteNewsgroup(MessageHandler mh)
 {
 	cout << "Name of the new Newsgroup?" << endl;
-	string name;
-	cin >> name;
-	mh.sendString(name);
+	string newsgroup_name;
+	getline(cin, newsgroup_name);
+	mh.sendString(newsgroup_name);
 	mh.sendByte(Protocol::COM_END);
 
 	unsigned char resp = mh.recvByte();
@@ -205,17 +204,16 @@ deleteNewsgroup(MessageHandler mh)
 	if (mh.recvByte() != Protocol::ANS_END) {
 		//error
 	}
-	cin.clear();
-	cin.ignore();
+
 }
 
 void
 listArticles(MessageHandler mh)
 {
 	cout << "Name of the Newsgroup?" << endl;
-	string name;
-	cin >> name;
-	mh.sendString(name);
+	string newsgroup_name;
+	getline(cin, newsgroup_name);
+	mh.sendString(newsgroup_name);
 	mh.sendByte(Protocol::COM_END);
 
 	unsigned char resp = mh.recvByte();
@@ -233,8 +231,6 @@ listArticles(MessageHandler mh)
 		//error
 	}
 
-	cin.clear();
-	cin.ignore();
 }
 
 void
@@ -242,16 +238,16 @@ createArticle(MessageHandler mh)
 {
 	cout << "Name of the new Newsgroup?" << endl;
 	string news_n;
-	cin >> news_n;
+	getline(cin, news_n);
 	cout << "Name of the title?" << endl;
 	string title;
-	cin >> title;
+	getline(cin, title);
 	cout << "Name of the author?" << endl;
 	string aut;
-	cin >> aut;
+	getline(cin, aut);
 	cout << "Article text" << endl;
 	string text;
-	cin >> text;
+	getline(cin, text);
 
 	mh.sendString(news_n);
 	mh.sendString(title);
@@ -269,8 +265,6 @@ createArticle(MessageHandler mh)
 	if (mh.recvByte() != Protocol::ANS_END) {
 		//error
 	}
-	cin.clear();
-	cin.ignore();
 }
 
 void
@@ -278,10 +272,10 @@ deleteArticle(MessageHandler mh)
 {
 	cout << "Name of the Newsgroup?" << endl;
 	string news_n;
-	cin >> news_n;
+	getline(cin, news_n);
 	cout << "Name of the Artcle?" << endl;
 	string art;
-	cin >> art;
+	getline(cin, art);
 
 	mh.sendString(news_n);
 	mh.sendString(art);
@@ -300,8 +294,6 @@ deleteArticle(MessageHandler mh)
 		//error
 	}
 
-	cin.clear();
-	cin.ignore();
 
 }
 
@@ -311,10 +303,10 @@ getArticle(MessageHandler mh)
 {
 	cout << "Name of the Newsgroup?" << endl;
 	string news_n;
-	cin >> news_n;
+	getline(cin, news_n);
 	cout << "Name of the Artcle?" << endl;
 	string title;
-	cin >> title;
+	getline(cin, title);
 
 	mh.sendString(news_n);
 	mh.sendString(title);
@@ -339,6 +331,4 @@ getArticle(MessageHandler mh)
 		//error
 	}
 
-	cin.clear();
-	cin.ignore();
 }
