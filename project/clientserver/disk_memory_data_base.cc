@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <algorithm>
+#include <regex>
 
 #include "database.h"
 #include "article.h"
@@ -38,12 +39,31 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
         }
     }
     
+    //Create init_file if it doesn't exist, read it otherwise
+    ifstream init_stream;
+    init_stream.open(root_directory_path + "/init_file");
+    if (!init_stream.good()) {
+        newsgroup_id = 0;
+        article_id = 0;
+        write_to_init(article_id, newsgroup_id);
+    } else {
+        read_init();
+    }
+    
     while ((root_dirp = readdir(root_dp)) != NULL) {
         //Create newsgroup object from directory
-        if (!strcmp(root_dirp->d_name, ".") || !strcmp(root_dirp->d_name, "..")) {
+        if (!strcmp(root_dirp->d_name, ".") ||
+            !strcmp(root_dirp->d_name, "..") ||
+            !strcmp(root_dirp->d_name, ".DS_Store") ||
+            !strcmp(root_dirp->d_name, "init_file")) {
             continue;
         }
-        Newsgroup newsgroup(root_dirp->d_ino, root_dirp->d_name);
+        
+        //Save newsgroup as object
+        int current_newsgroup_id = get_id(root_dirp->d_name);
+        string current_newsgroup_name = get_name(root_dirp->d_name);
+        Newsgroup newsgroup(current_newsgroup_id, current_newsgroup_name);
+        
         //Open newsgroup directory
         DIR *newsgroup_dp;
         struct dirent *newsgroup_dirp;
@@ -53,17 +73,18 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
         
         //read files in newsgroup directory
         while ((newsgroup_dirp = readdir(newsgroup_dp)) != NULL) {
-            article_title = newsgroup_dirp->d_name;
-            //article_id = newsgroup_dirp->d_ino;
+            if (!strcmp(newsgroup_dirp->d_name, ".") ||
+                !strcmp(newsgroup_dirp->d_name, "..") ||
+                !strcmp(root_dirp->d_name, ".DS_Store")) {
+                continue;
+            }
+            article_title = get_name(newsgroup_dirp->d_name);
+            article_id = get_id(newsgroup_dirp->d_name);
             article_path = newsgroup_path + "/" + newsgroup_dirp->d_name;
             article_stream.open(article_path.c_str());
             
-            string line;
-            string stringed_article_id;
-            string::size_type sz;
-            getline(article_stream, stringed_article_id);
-            article_id = stoi(stringed_article_id, &sz); //First line = id
-            getline(article_stream, article_author); //Second line = author
+            string line, stringed_article_id;
+            getline(article_stream, article_author); //First line = author
             while (getline(article_stream, line)) {
                 article_text += line + "\n";
             }
@@ -93,11 +114,13 @@ DiskMemoryDataBase::addNewsgroup(
 {
     auto itr = find_if(newsgroups.begin(), newsgroups.end(),
              [newsgroup_title](Newsgroup ng) {
-                 return ng.name() == newsgroup_title;
+                 return get_name(ng.name()) == newsgroup_title;
              });
     
     if (itr == newsgroups.end()) {
-        string newsgroup_path = root_directory_path + "/" + newsgroup_title;
+        ostringstream convert;
+        convert << newsgroup_id;
+        string newsgroup_path = root_directory_path + "/" + convert.str() + "_" + newsgroup_title;
         int status = mkdir(newsgroup_path.c_str(), S_IRWXU);
         if (status != 0) {
             cout << "Error(" << errno << ") creating " << newsgroup_path << endl;
@@ -205,7 +228,7 @@ DiskMemoryDataBase::getArticle(
 {
     auto itr = find_if(newsgroups.begin(), newsgroups.end(),
                        [newsgroup_title](Newsgroup ng) {
-                           return newsgroup_title == ng.name();
+                           return newsgroup_title.compare(ng.name()) == 0;
                        });
    
     if (itr != newsgroups.end()) {
@@ -215,4 +238,53 @@ DiskMemoryDataBase::getArticle(
     }
 }
 
+void
+DiskMemoryDataBase::write_to_init(
+            int article_id,
+            int newsgroup_dp)
+{
+    ofstream init_file;
+    init_file.open(root_directory_path + "/init_file");
+    init_file << article_id << "\n";
+    init_file << newsgroup_id << "\n";
+    init_file.close();
+}
+            
+int
+DiskMemoryDataBase::get_id(string filename)
+{
+    regex rgx("^(\\d+)_.*$");
+    smatch match;
+    
+    if (regex_search(filename, match, rgx)) {
+        return stoi(match[1]);
+    }
+}
+            
+string
+DiskMemoryDataBase::get_name(string filename)
+{
+    regex rgx("^\\d+_(.*)$");
+    smatch match;
+    
+    if (regex_search(filename, match, rgx)) {
+        return match[1];
+    }
+}
 
+void
+DiskMemoryDataBase::read_init()
+{
+    ifstream init_stream;
+    init_stream.open(root_directory_path + "/init_file");
+    string stringed_article_id;
+    getline(init_stream, stringed_article_id);
+    article_id = stoi(stringed_article_id); //First line = articles_id
+                
+    string stringed_newsgroup_id;
+    getline(init_stream, stringed_newsgroup_id);
+    newsgroup_id = stoi(stringed_newsgroup_id); //Second line = newsgroups_id
+    init_stream.close();
+}
+            
+            

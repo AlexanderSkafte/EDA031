@@ -51,6 +51,10 @@ class DiskMemoryDataBase : public DataBase {
 
 
 	private:
+        void read_init();
+        void write_to_init(int article_id, int newsgroup_id);
+        int get_id(std::string filename);
+        std::string get_name(std::string filename);
         std::string root_directory_path;
         std::vector<Newsgroup> newsgroups;
         int newsgroup_id;
