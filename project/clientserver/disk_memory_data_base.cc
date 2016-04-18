@@ -250,15 +250,17 @@ DiskMemoryDataBase::getArticle(
            string newsgroup_title,
            string article_name)
 {
+    vector<Article> vec;
     auto itr = find_if(newsgroups.begin(), newsgroups.end(),
                        [newsgroup_title](Newsgroup ng) {
                            return newsgroup_title.compare(ng.name()) == 0;
                        });
    
     if (itr != newsgroups.end()) {
-        return itr->getArticle(article_name);
+        vec = itr->getArticle(article_name);
+        return vec;
     } else {
-        return "Error: could not find newsgroup";
+        return vec;
     }
 }
 

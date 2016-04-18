@@ -34,7 +34,6 @@ Newsgroup::getArticle(const string& sought_article) const
             vec.push_back(a);
         }
     }
-	
     return vec;
 }
 
@@ -59,7 +58,7 @@ Newsgroup::deleteArticle(string article_name)
 }
 
 void
-Newsgroup::addArticle(Article a)
+Newsgroup::createArticle(Article a)
 {
 	articles_.push_back(a);
 }
