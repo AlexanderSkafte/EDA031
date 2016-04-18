@@ -17,7 +17,7 @@
 
 using namespace std;
 
-
+DiskMemoryDataBase::~DiskMemoryDataBase() {}
 
 DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
     : root_directory_path{root_path}
@@ -99,6 +99,12 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
         closedir(newsgroup_dp);
         newsgroups.push_back(newsgroup);
     }
+
+    //Sort newsgroup after addDate
+    sort(newsgroups.begin(), newsgroups.end(),
+         [](Newsgroup ng1, Newsgroup ng2) {
+             return ng1.id() < ng2.id();
+         });
     closedir(root_dp);
 }
 
@@ -322,5 +328,7 @@ DiskMemoryDataBase::read_init()
     newsgroup_id = stoi(stringed_newsgroup_id); //Second line = newsgroups_id
     init_stream.close();
 }
+
+
             
             
