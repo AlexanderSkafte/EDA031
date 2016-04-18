@@ -20,7 +20,10 @@ int main() {
     cout << "addArticle successful!" << endl;
     
     cout << "Testing getArticle..." << endl;
-    cout << dmdb.getArticle("Newsgroup 2", "Article 2") << endl;
+    auto artvec = dmdb.getArticle("Newsgroup 2", "Article 2");
+    for (auto art : artvec) {
+        cout << art.title() << endl;
+    }
     cout << "getArticle successful!" << endl;
     
     cout << "Testing getArticles..." << endl;

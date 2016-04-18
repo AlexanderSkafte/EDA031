@@ -12,7 +12,7 @@ public:
 
 	int         id();
 	std::string name();
-	std::string getArticle(const std::string& sought_article) const;
+	std::vector<Article> getArticle(const std::string& sought_article) const;
 	std::vector<Article> listNewsgroup() const;
 	bool		deleteArticle(std::string article_name);
 	void        createArticle(Article a);

@@ -245,7 +245,7 @@ DiskMemoryDataBase::deleteArticle(
     }
 }
 
-string
+vector<Article>
 DiskMemoryDataBase::getArticle(
            string newsgroup_title,
            string article_name)

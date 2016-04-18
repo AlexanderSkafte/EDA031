@@ -25,20 +25,17 @@ Newsgroup::name()
 	return name_;
 }
 
-string 
+vector<Article>
 Newsgroup::getArticle(const string& sought_article) const
 {
-	auto itr = find_if(articles_.begin(), articles_.end(),
-		[sought_article](Article current_article) {
-		return current_article.title() == sought_article;
-	});
-	if (itr != articles_.end()) {
-		return itr->text();
-	}
-	else {
-		//Probably faulty logic, fix this case
-		return "";
-	}
+    vector<Article> vec;
+    for (auto a : articles_) {
+        if (a.title() == sought_article) {
+            vec.push_back(a);
+        }
+    }
+	
+    return vec;
 }
 
 vector<Article>
