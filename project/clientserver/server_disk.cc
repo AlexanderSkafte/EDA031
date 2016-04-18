@@ -1,4 +1,4 @@
-#include "adapter.h"
+#include "adapter_disk.h"
 #include "connection.h"
 #include "connectionclosedexception.h"
 #include "protocol.h"
@@ -35,8 +35,13 @@ int main(int argc, char* argv[])
 		cerr << "Wrong port." << endl;
 		exit(1); 
 	}
+	
+	cout << "write the filepath to the root directory"<< endl;
+	string line;
+	cin >> line;
+	cin.ignore();
+	AdapterDisk adapter(line);
 
-	Adapter adapter;
 	cout << "Server running" << endl;
 
 	while (true) {

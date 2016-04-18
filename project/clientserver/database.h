@@ -10,7 +10,7 @@
 /*An interface for the Database classes*/
 class DataBase {
 public:
-	virtual ~DataBase() {} //destructor for inherited class
+	   virtual ~DataBase() {} //destructor for inherited class
 	
     virtual std::vector<std::pair<std::string, unsigned int>>
 		listNewsgroups() = 0;
