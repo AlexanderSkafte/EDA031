@@ -21,7 +21,7 @@ class DiskMemoryDataBase : public DataBase {
 			listNewsgroups();
 
 		int
-			addNewsgroup(
+			createNewsgroup(
 				std::string);
 		
 		int
@@ -29,11 +29,11 @@ class DiskMemoryDataBase : public DataBase {
 				std::string newsgroup_title);
 
 		std::vector<Article>
-			getArticles(
+			listArticles(
 				std::string newsgroup_title);
 
 		void 
-			addArticle(
+			createArticle(
 				std::string newsgroup_title,
 				std::string article_name,
 				std::string author,
@@ -44,7 +44,7 @@ class DiskMemoryDataBase : public DataBase {
 				std::string newsgroup_title,
 				std::string article_name);
 
-		std::string
+		std::vector<Article>
 			getArticle(
 				std::string newsgroup_title,
 				std::string article_name);

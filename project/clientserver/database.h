@@ -40,7 +40,7 @@ public:
     
     
     
-    virtual std::string
+    virtual std::vector<Article>
         getArticle(
                std::string newsgroup_title,
                std::string article_name) = 0;

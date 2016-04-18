@@ -111,7 +111,7 @@ DiskMemoryDataBase::listNewsgroups()
 }
 
 int
-DiskMemoryDataBase::addNewsgroup(
+DiskMemoryDataBase::createNewsgroup(
              string newsgroup_title)
 {
     auto itr = find_if(newsgroups.begin(), newsgroups.end(),
@@ -157,7 +157,7 @@ DiskMemoryDataBase::deleteNewsgroup(
 }
 
 vector<Article>
-DiskMemoryDataBase::getArticles(
+DiskMemoryDataBase::listArticles(
             string newsgroup_title)
 {
     vector<Article> vec;
@@ -171,7 +171,7 @@ DiskMemoryDataBase::getArticles(
 }
 
 void
-DiskMemoryDataBase::addArticle(
+DiskMemoryDataBase::createArticle(
            string newsgroup_title,
            string article_name,
            string author,
