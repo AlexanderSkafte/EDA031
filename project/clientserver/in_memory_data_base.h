@@ -21,34 +21,34 @@ public:
 		listNewsgroups();
 
 	int
-		addNewsgroup(
-			std::string);
+		createNewsgroup(
+			const std::string&);
 
 	int
 		deleteNewsgroup(
-			std::string newsgroup_title);
+			const std::string& newsgroup_title);
 
 
 	std::vector<Article>
-		getArticles(
-			std::string newsgroup_title);
+		listArticles(
+			const std::string& newsgroup_title);
 
 	void
-		addArticle(
-			std::string newsgroup_title, std::string article_name,
-			std::string author, std::string text);
+		createArticle(
+			const std::string& newsgroup_title, const std::string& article_name,
+			const std::string& author, const std::string& text);
 
 	int
 		deleteArticle(
-			std::string newsgroup_title,
-			std::string article_name);
+			const std::string& newsgroup_title,
+			const std::string& article_name);
 
 
 
-	std::string
+	std::vector<Article>
 		getArticle(
-			std::string newsgroup_title,
-			std::string article_name);
+			const std::string& newsgroup_title,
+			const std::string& article_name);
 
 
 private:

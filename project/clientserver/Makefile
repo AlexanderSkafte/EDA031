@@ -19,13 +19,13 @@ LDFLAGS   = -g -L..
 #LDLIBS = -lclientserver
 
 # Targets
-PROGS = TestDNA client server_main testDisk
+PROGS = client server_main testDisk
 
 all: $(PROGS)
 
 # Targets rely on implicit rules for compiling and linking
-# The dependency on libclientserver.a is not defined.
-TestDNA: TestDNA.o in_memory_data_base.o newsgroup.o article.o connection.o messagehandler.o 
+# The dependency on libclientserve	r.a is not defined.
+#TestDNA: TestDNA.o in_memory_data_base.o newsgroup.o article.o connection.o messagehandler.o 
 client: client.o in_memory_data_base.o newsgroup.o article.o connection.o messagehandler.o server.o connection.o
 server_main: in_memory_data_base.o newsgroup.o article.o connection.o messagehandler.o  server_main.o adapter.o server.o connection.o
 testDisk: testDisk.o disk_memory_data_base.o newsgroup.o article.o connection.o messagehandler.o

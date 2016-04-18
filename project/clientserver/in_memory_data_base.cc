@@ -29,21 +29,22 @@ InMemoryDataBase::listNewsgroups()
 
 /*Om NG inte finns -> skapa NG. Inga fel ska kunna ske här*/
 void
-InMemoryDataBase::addArticle(std::string newsgroup_title, std::string article_name,
-	std::string author, std::string text)
+InMemoryDataBase::createArticle(const std::string& newsgroup_title, const std::string& article_name,
+	const std::string& author, const std::string& text)
 {
 	bool check = false;
-	Article a(article_name, author, text);
+	++article_id;
+	Article a(article_id, author, text, article_name);
 	for (auto it = newsgroups.begin(); it!= newsgroups.end(); ++it) {
 		if (it->name().compare(newsgroup_title) == 0) {
 			check = true;
-			it->addArticle(a);
+			it->createArticle(a);
 			break;
 		}
 	}
 	if (!check) {
 		Newsgroup ng(newsgroup_id, newsgroup_title);
-		ng.addArticle(a);
+		ng.createArticle(a);
 		newsgroups.push_back(ng);
 
 	}
@@ -52,7 +53,7 @@ InMemoryDataBase::addArticle(std::string newsgroup_title, std::string article_na
 }
 
 int
-InMemoryDataBase::deleteArticle(string newsgroup_title, string article_name)
+InMemoryDataBase::deleteArticle(const string& newsgroup_title, const string& article_name)
 {
 	bool check = false;
 	for (auto it = newsgroups.begin(); it!= newsgroups.end(); ++it) {
@@ -74,7 +75,7 @@ InMemoryDataBase::deleteArticle(string newsgroup_title, string article_name)
 }
 
 int
-InMemoryDataBase::addNewsgroup(string newsgroup_title)
+InMemoryDataBase::createNewsgroup(const string& newsgroup_title)
 {
 	bool check = false;
 	for (auto it = newsgroups.begin(); it!= newsgroups.end(); ++it) {
@@ -96,7 +97,7 @@ InMemoryDataBase::addNewsgroup(string newsgroup_title)
 }
 
 int
-InMemoryDataBase::deleteNewsgroup(string newsgroup_title)
+InMemoryDataBase::deleteNewsgroup(const string& newsgroup_title)
 {
 	
 	bool check = false;
@@ -116,22 +117,26 @@ InMemoryDataBase::deleteNewsgroup(string newsgroup_title)
 	}
 }
 
-string
-InMemoryDataBase::getArticle(string newsgroup_title, string article_name)
+vector<Article>
+InMemoryDataBase::getArticle(const string& newsgroup_title, const string& article_name)
 {
+	vector<Article> all_articles;
 	for (auto it = newsgroups.begin(); it!= newsgroups.end(); ++it) {
 		if (it->name().compare(newsgroup_title) == 0) {
-			string text = it->getArticle(article_name);
-			if (text.compare("") != 0) {
-				return text;
+			vector<Article> article_list = it->getArticle(article_name);
+			size_t s = article_list.size();
+			if (s != 0) {
+				for (size_t i = 0; i<s; ++i) {
+					all_articles.push_back(article_list.at(i));
+				}
 			} 
 		}
 	}
-	return "";
+	return all_articles;
 }
 
 vector<Article>
-InMemoryDataBase::getArticles(string newsgroup_title)
+InMemoryDataBase::listArticles(const string& newsgroup_title)
 {
 	vector<Article> vec;
 	for (auto it = newsgroups.begin(); it!= newsgroups.end(); ++it) {

@@ -324,7 +324,13 @@ getArticle(MessageHandler mh)
 	if (resp == Protocol::ANS_NAK) {
 		cout << "No such article/newsgroup." << endl;
 	} else if (resp == Protocol::ANS_ACK) {
-		cout << "Here is the text: " << mh.recvString() << endl;
+		size_t s = mh.recvInt();
+		for (size_t i = 0; i < s; ++i) {
+			cout << mh.recvInt() << " ";
+			cout << mh.recvString() << " ";
+			cout << mh.recvString() << " ";
+			cout << mh.recvString() << endl;
+		}
 	} else {
 		//error?
 	}
