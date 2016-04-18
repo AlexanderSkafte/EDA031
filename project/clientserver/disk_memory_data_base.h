@@ -16,6 +16,7 @@
 class DiskMemoryDataBase : public DataBase {
 	public:
         DiskMemoryDataBase(const std::string& root_path);
+        ~DiskMemoryDataBase();
     
 		std::vector<std::pair<std::string, unsigned int>>
 			listNewsgroups();
