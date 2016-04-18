@@ -6,8 +6,8 @@ using namespace std;
 
 class Article {
 public:
-	Article(int id, std::string author, std::string text, std::string title);
-	int         id();
+	Article(int art_id, std::string author, std::string text, std::string title);
+	int         art_id();
 	Article(string author, string text, string title);
 	std::string title() const;
 	std::string author() const;

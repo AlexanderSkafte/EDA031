@@ -6,6 +6,7 @@
 #include <fstream>
 #include <algorithm>
 #include <regex>
+#include <sstream>
 
 #include "database.h"
 #include "article.h"
@@ -114,7 +115,7 @@ DiskMemoryDataBase::addNewsgroup(
 {
     auto itr = find_if(newsgroups.begin(), newsgroups.end(),
              [newsgroup_title](Newsgroup ng) {
-                 return get_name(ng.name()) == newsgroup_title;
+                 return ng.name() == newsgroup_title;
              });
     
     if (itr == newsgroups.end()) {
@@ -129,6 +130,8 @@ DiskMemoryDataBase::addNewsgroup(
         Newsgroup newsgroup(newsgroup_id, newsgroup_title);
         newsgroups.push_back(newsgroup);
         ++newsgroup_id;
+        write_to_init(article_id, newsgroup_id);
+        
         return Protocol::ANS_ACK;
     } else {
         return Protocol::ERR_NG_ALREADY_EXISTS;
@@ -141,7 +144,9 @@ DiskMemoryDataBase::deleteNewsgroup(
 {
     for (auto itr = newsgroups.begin(); itr != newsgroups.end(); ++itr) {
         if (itr->name() == newsgroup_title) {
-            string newsgroup_path = root_directory_path + "/" + itr->name();
+            ostringstream convert;
+            convert << itr->id();
+            string newsgroup_path = root_directory_path + "/" + convert.str() + "_" + itr->name();
             remove(newsgroup_path.c_str());
             newsgroups.erase(itr);
             return Protocol::ANS_ACK;
@@ -172,7 +177,8 @@ DiskMemoryDataBase::addArticle(
            string text)
 {
     
-    Article article(article_name, author, text);
+    string current_newsgroup_id;
+    Article article(article_id, article_name, author, text);
     auto itr = find_if(newsgroups.begin(), newsgroups.end(),
                        [newsgroup_title](Newsgroup ng) {
                            return ng.name() == newsgroup_title;
@@ -180,23 +186,27 @@ DiskMemoryDataBase::addArticle(
     
     if (itr != newsgroups.end()) {
         itr->addArticle(article);
-        
+        current_newsgroup_id = itr->id();
     } else {
         addNewsgroup(newsgroup_title);
         auto& newsgroup = newsgroups.back();
         newsgroup.addArticle(article);
+        current_newsgroup_id = newsgroup.id();
     }
     
-    string newsgroup_path = root_directory_path + "/" + newsgroup_title;
+    string newsgroup_path = root_directory_path + "/" + current_newsgroup_id +
+                            "_" + newsgroup_title;
     ofstream article_file;
-    article_file.open(newsgroup_path + "/" + article_name);
+    ostringstream stringed_article_id;
+    stringed_article_id << article_id;
+    article_file.open(newsgroup_path + "/" + stringed_article_id.str() + "_" + article_name);
     article_file << article_id << "\n";
     article_file << author + "\n";
     article_file << text;
     ++article_id;
+    write_to_init(article_id, newsgroup_id);
+    
     article_file.close();
-    
-    
 }
 
 int
@@ -204,13 +214,28 @@ DiskMemoryDataBase::deleteArticle(
               string newsgroup_title,
               string article_name)
 {
-    string article_path = root_directory_path + "/" + newsgroup_title + "/" + article_name;
-    auto itr = find_if(newsgroups.begin(), newsgroups.end(),
+    auto newsgroup_itr = find_if(newsgroups.begin(), newsgroups.end(),
                        [newsgroup_title](Newsgroup ng) {
                            return newsgroup_title == ng.name();
                        });
-    if (itr != newsgroups.end()) {
-        if (itr->deleteArticle(article_name)) {
+    if (newsgroup_itr != newsgroups.end()) {
+        vector<Article> article_vec = newsgroup_itr->listNewsgroup();
+        int test_art_id;
+        for (Article a : article_vec) {
+            if (a.title() == article_name) {
+                test_art_id = a.art_id();
+            }
+        }
+        
+        if (test_art_id != 0) {
+            ostringstream newsgroup_id_string, article_id_string;
+            newsgroup_id_string << test_art_id;
+            article_id_string << test_art_id;
+            
+            string article_path = root_directory_path + "/" + newsgroup_id_string.str() + "_" +
+                                    newsgroup_itr->name() + "/" + article_id_string.str() + "_" +
+                                    article_name;
+            newsgroup_itr->deleteArticle(article_name);
             remove(article_path.c_str());
             return Protocol::ANS_ACK;
         } else {
@@ -241,7 +266,7 @@ DiskMemoryDataBase::getArticle(
 void
 DiskMemoryDataBase::write_to_init(
             int article_id,
-            int newsgroup_dp)
+            int newsgroup_id)
 {
     ofstream init_file;
     init_file.open(root_directory_path + "/init_file");
