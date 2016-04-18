@@ -1,5 +1,6 @@
 # Swap files
 *.swp
+*.swo
 
 # Compiled Object files
 *.slo
