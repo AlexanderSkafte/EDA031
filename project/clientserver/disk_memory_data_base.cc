@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <regex>
 #include <sstream>
+#include <cstring>
 
 #include "database.h"
 #include "article.h"
@@ -220,17 +221,15 @@ DiskMemoryDataBase::deleteArticle(
                        });
     if (newsgroup_itr != newsgroups.end()) {
         vector<Article> article_vec = newsgroup_itr->listNewsgroup();
-        int test_art_id;
-        for (Article a : article_vec) {
-            if (a.title() == article_name) {
-                test_art_id = a.art_id();
-            }
-        }
+        auto itr = find_if(article_vec.begin(), article_vec.end(),
+                           [article_name](Article a) {
+                               return article_name == a.title();
+                           });
         
-        if (test_art_id != 0) {
+        if (itr != article_vec.end()) {
             ostringstream newsgroup_id_string, article_id_string;
-            newsgroup_id_string << test_art_id;
-            article_id_string << test_art_id;
+            newsgroup_id_string << itr->art_id();
+            article_id_string << itr->art_id();
             
             string article_path = root_directory_path + "/" + newsgroup_id_string.str() + "_" +
                                     newsgroup_itr->name() + "/" + article_id_string.str() + "_" +
