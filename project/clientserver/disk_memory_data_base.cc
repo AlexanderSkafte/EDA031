@@ -92,7 +92,7 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
             }
             Article article(article_title, article_author, article_text);
             article_stream.close();
-            newsgroup.addArticle(article);
+            newsgroup.createArticle(article);
         }
         closedir(newsgroup_dp);
         newsgroups.push_back(newsgroup);
@@ -186,12 +186,12 @@ DiskMemoryDataBase::createArticle(
                        });
     
     if (itr != newsgroups.end()) {
-        itr->addArticle(article);
+        itr->createArticle(article);
         current_newsgroup_id = itr->id();
     } else {
-        addNewsgroup(newsgroup_title);
+        createNewsgroup(newsgroup_title);
         auto& newsgroup = newsgroups.back();
-        newsgroup.addArticle(article);
+        newsgroup.createArticle(article);
         current_newsgroup_id = newsgroup.id();
     }
     

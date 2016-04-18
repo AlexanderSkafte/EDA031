@@ -15,7 +15,7 @@ public:
 	std::string getArticle(const std::string& sought_article) const;
 	std::vector<Article> listNewsgroup() const;
 	bool		deleteArticle(std::string article_name);
-	void        addArticle(Article a);
+	void        createArticle(Article a);
 
 private:
 	std::string name_;
