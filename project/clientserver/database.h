@@ -17,33 +17,35 @@ public:
     
     virtual int
         createNewsgroup(
-                std::string) = 0;
+                const std::string& newsgroup_title) = 0;
     
     virtual int
         deleteNewsgroup(
-                    std::string newsgroup_title) = 0;
+                const std::string& newsgroup_title) = 0;
     
     
     virtual std::vector<Article>
         listArticles(
-                std::string newsgroup_title) = 0;
+                const std::string& newsgroup_title) = 0;
     
     virtual void
         createArticle(
-               std::string newsgroup_title, std::string article_name,
-               std::string author, std::string text) = 0;
+               const std::string& newsgroup_title,
+               const std::string& article_name,
+               const std::string& author,
+               const std::string& text) = 0;
     
     virtual int
         deleteArticle(
-                  std::string newsgroup_title,
-                  std::string article_name) = 0;
+                  const std::string& newsgroup_title,
+                  const std::string& article_name) = 0;
     
     
     
     virtual std::vector<Article>
         getArticle(
-               std::string newsgroup_title,
-               std::string article_name) = 0;
+               const std::string& newsgroup_title,
+               const std::string& article_name) = 0;
 
 };
 
