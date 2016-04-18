@@ -22,32 +22,32 @@ class DiskMemoryDataBase : public DataBase {
 
 		int
 			createNewsgroup(
-				std::string);
+				const std::string& newsgroup_title);
 		
 		int
 			deleteNewsgroup(
-				std::string newsgroup_title);
+				const std::string& newsgroup_title);
 
 		std::vector<Article>
 			listArticles(
-				std::string newsgroup_title);
+				const std::string& newsgroup_title);
 
 		void 
 			createArticle(
-				std::string newsgroup_title,
-				std::string article_name,
-				std::string author,
-				std::string text);
+				const std::string& newsgroup_title,
+				const std::string& article_name,
+				const std::string& author,
+				const std::string& text);
 
 		int
 			deleteArticle(
-				std::string newsgroup_title,
-				std::string article_name);
+				const std::string& newsgroup_title,
+				const std::string& article_name);
 
 		std::vector<Article>
 			getArticle(
-				std::string newsgroup_title,
-				std::string article_name);
+				const std::string& newsgroup_title,
+				const std::string& article_name);
 
 
 	private:
