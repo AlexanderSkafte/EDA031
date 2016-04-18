@@ -12,11 +12,11 @@ int main() {
     cout << "First init of DMDB successful!" << endl;
     
     cout << "Testing addNewsgroup fcn..." << endl;
-    cout << dmdb.addNewsgroup("Newsgroup 1") << endl;
+    cout << dmdb.createNewsgroup("Newsgroup 1") << endl;
     cout << "addNewsgroup successful!" << endl;
     
     cout << "Testing addArticle..." << endl;
-    dmdb.addArticle("Newsgroup 2", "Article 2", "Andreas", "Text...");
+    dmdb.createArticle("Newsgroup 2", "Article 2", "Andreas", "Text...");
     cout << "addArticle successful!" << endl;
     
     cout << "Testing getArticle..." << endl;
@@ -24,7 +24,7 @@ int main() {
     cout << "getArticle successful!" << endl;
     
     cout << "Testing getArticles..." << endl;
-    auto vec = dmdb.getArticles("Newsgroup 2");
+    auto vec = dmdb.listArticles("Newsgroup 2");
     for (auto a : vec) {
         cout << "Title: " << a.title() << endl;
         //cout << "ID: " << a.id() << endl;
