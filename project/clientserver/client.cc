@@ -6,6 +6,7 @@
 #include "protocol.h"
 #include "messagehandler.h"
 #include <map>
+#include <regex>
 #include "connectionclosedexception.h"
 
 using namespace std;
@@ -59,7 +60,7 @@ main(int argc, char* argv[])
 		cerr << "Invalid port." << e.what() << endl;
 		exit(1);
 	}
-
+	
 
 	Connection conn(argv[1], port);
 	auto ptr = shared_ptr<Connection>(&conn);
@@ -167,8 +168,8 @@ createNewsgroup(MessageHandler mh)
 	string newsgroup_name;
 	getline(cin, newsgroup_name);
 	mh.sendString(newsgroup_name);
-	mh.sendByte(Protocol::COM_END);
-	unsigned int resp = mh.recvByte();
+	mh.sendByte(Protocol::COM_END);	
+unsigned int resp = mh.recvByte();
 	if (resp ==Protocol::ANS_ACK) {
 		cout << "The newsgroup was added to the database." << endl;;
 	} else if (resp == Protocol::ANS_NAK) {

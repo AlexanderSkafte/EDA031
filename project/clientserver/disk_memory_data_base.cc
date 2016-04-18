@@ -39,11 +39,12 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
         else {
             root_dp = opendir(root_directory_path.c_str());
         }
-    }
+    } 
     
     //Create init_file if it doesn't exist, read it otherwise
     ifstream init_stream;
     init_stream.open(root_directory_path + "/init_file");
+
     if (!init_stream.good()) {
         newsgroup_id    = 0;
         article_id      = 0;
@@ -68,11 +69,12 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
         Newsgroup newsgroup(current_newsgroup_id, current_newsgroup_name);
         
         //Open newsgroup directory
+
         DIR             *newsgroup_dp;
         struct dirent   *newsgroup_dirp;
         newsgroup_path  = root_directory_path + "/" + root_dirp->d_name;
         newsgroup_dp    = opendir(newsgroup_path.c_str());
-        
+
         //read files in newsgroup directory
         while ((newsgroup_dirp = readdir(newsgroup_dp)) != NULL) {
             
@@ -140,11 +142,10 @@ DiskMemoryDataBase::createNewsgroup(
             cout << "Error(" << errno << ") creating " << newsgroup_path << endl;
             //Borde returnera ett error här. Vet dock inte vad det skulle vara...
         }
-        
+        ++newsgroup_id;
         Newsgroup newsgroup(newsgroup_id, newsgroup_title);
         newsgroups.push_back(newsgroup);
         write_to_init(article_id, newsgroup_id);
-        ++newsgroup_id;
         
         return Protocol::ERR_NG_DOES_NOT_EXIST;
     } else {
@@ -209,7 +210,7 @@ DiskMemoryDataBase::createArticle(
         newsgroup.createArticle(article);
         current_newsgroup_id = newsgroup.id();
     }
-    
+    ++article_id;
     string newsgroup_path = root_directory_path + "/" + current_newsgroup_id +
                             "_" + newsgroup_title;
     ofstream article_file;
@@ -219,7 +220,6 @@ DiskMemoryDataBase::createArticle(
     article_file << article_id << "\n";
     article_file << author + "\n";
     article_file << text;
-    ++article_id;
     write_to_init(article_id, newsgroup_id);
     
     article_file.close();
@@ -296,23 +296,20 @@ DiskMemoryDataBase::write_to_init(
 int
 DiskMemoryDataBase::get_id(const string& filename)
 {
-    regex rgx("^(\\d+)_.*$");
-    smatch match;
-    
-    if (regex_search(filename, match, rgx)) {
-        return stoi(match[1]);
-    }
+    stringstream ss(filename);
+    int nbr;
+    ss >> nbr;
+    return nbr;
 }
             
 string
 DiskMemoryDataBase::get_name(const string& filename)
 {
-    regex rgx("^\\d+_(.*)$");
-    smatch match;
     
-    if (regex_search(filename, match, rgx)) {
-        return match[1];
-    }
+    size_t i = filename.find("_");
+    string new_str = filename.substr(i+1);
+    return new_str;
+    
 }
 
 void
