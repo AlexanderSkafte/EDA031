@@ -57,7 +57,8 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
         if (!strcmp(root_dirp->d_name, ".")         ||
             !strcmp(root_dirp->d_name, "..")        ||
             !strcmp(root_dirp->d_name, ".DS_Store") ||
-            !strcmp(root_dirp->d_name, "init_file")) {
+            !strcmp(root_dirp->d_name, "init_file"))
+        {
             continue;
         }
         
@@ -74,9 +75,11 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
         
         //read files in newsgroup directory
         while ((newsgroup_dirp = readdir(newsgroup_dp)) != NULL) {
-            if (!strcmp(newsgroup_dirp->d_name, ".") ||
-                !strcmp(newsgroup_dirp->d_name, "..") ||
-                !strcmp(root_dirp->d_name, ".DS_Store")) {
+            
+            if (!strcmp(newsgroup_dirp->d_name, ".")    ||
+                !strcmp(newsgroup_dirp->d_name, "..")   ||
+                !strcmp(root_dirp->d_name, ".DS_Store"))
+            {
                 continue;
             }
             article_title   = get_name(newsgroup_dirp->d_name);
@@ -84,7 +87,7 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
             article_path    = newsgroup_path + "/" + newsgroup_dirp->d_name;
             article_stream.open(article_path.c_str());
             
-            string line, stringed_article_id;
+            string line;
             getline(article_stream, article_author); //First line = author
             while (getline(article_stream, line)) {
                 article_text += line + "\n";
