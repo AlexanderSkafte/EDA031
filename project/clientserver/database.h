@@ -16,7 +16,7 @@ public:
 		listNewsgroups() = 0;
     
     virtual int
-        addNewsgroup(
+        createNewsgroup(
                 std::string) = 0;
     
     virtual int
@@ -25,11 +25,11 @@ public:
     
     
     virtual std::vector<Article>
-        getArticles(
+        listArticles(
                 std::string newsgroup_title) = 0;
     
     virtual void
-        addArticle(
+        createArticle(
                std::string newsgroup_title, std::string article_name,
                std::string author, std::string text) = 0;
     
