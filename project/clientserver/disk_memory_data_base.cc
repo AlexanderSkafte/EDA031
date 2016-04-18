@@ -101,10 +101,11 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
     }
 
     //Sort newsgroup after addDate
-    sort(newsgroups.begin(), newsgroups.end(),
+       sort(newsgroups.begin(), newsgroups.end(),
          [](Newsgroup ng1, Newsgroup ng2) {
              return ng1.id() < ng2.id();
          });
+ 
     closedir(root_dp);
 }
 
@@ -145,7 +146,7 @@ DiskMemoryDataBase::createNewsgroup(
         write_to_init(article_id, newsgroup_id);
         ++newsgroup_id;
         
-        return Protocol::ANS_ACK;
+        return Protocol::ERR_NG_DOES_NOT_EXIST;
     } else {
         return Protocol::ERR_NG_ALREADY_EXISTS;
     }
@@ -257,7 +258,7 @@ DiskMemoryDataBase::deleteArticle(
             return Protocol::ERR_ART_DOES_NOT_EXIST;
         }
     } else {
-        return Protocol::ERR_NG_DOES_NOT_EXIST;
+        return Protocol::ERR_ART_DOES_NOT_EXIST;
     }
 }
 
