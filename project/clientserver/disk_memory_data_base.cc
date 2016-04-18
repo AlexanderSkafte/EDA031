@@ -153,7 +153,7 @@ DiskMemoryDataBase::deleteNewsgroup(
         if (itr->name() == newsgroup_title) {
             ostringstream           newsgroup_id_string;
             newsgroup_id_string <<  itr->id();
-            string newsgroup_path = root_directory_path + "/" + convert.str()
+            string newsgroup_path = root_directory_path + "/" + newsgroup_id_string.str()
                                     + "_" + itr->name();
             remove(newsgroup_path.c_str());
             newsgroups.erase(itr);
