@@ -40,12 +40,15 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
     
     while ((root_dirp = readdir(root_dp)) != NULL) {
         //Create newsgroup object from directory
+        if (!strcmp(root_dirp->d_name, ".") || !strcmp(root_dirp->d_name, "..")) {
+            continue;
+        }
         Newsgroup newsgroup(root_dirp->d_ino, root_dirp->d_name);
-        
         //Open newsgroup directory
         DIR *newsgroup_dp;
         struct dirent *newsgroup_dirp;
         newsgroup_path = root_directory_path + "/" + root_dirp->d_name;
+        cout << newsgroup_path << endl;
         newsgroup_dp = opendir(newsgroup_path.c_str());
         
         //read files in newsgroup directory
