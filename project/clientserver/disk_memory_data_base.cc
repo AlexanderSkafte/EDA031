@@ -163,6 +163,15 @@ DiskMemoryDataBase::deleteNewsgroup(
             newsgroup_id_string <<  itr->id();
             string newsgroup_path = root_directory_path + "/" + newsgroup_id_string.str()
                                     + "_" + itr->name();
+            DIR *dp;
+            struct dirent *dirp;
+            
+            dp = opendir(newsgroup_path.c_str());
+            while ((dirp = readdir(dp)) != NULL) {
+                string str = newsgroup_path + "/" + dirp->d_name;
+                remove(str.c_str());
+            }
+            closedir(dp);
             remove(newsgroup_path.c_str());
             newsgroups.erase(itr);
             

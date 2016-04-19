@@ -187,7 +187,7 @@ unsigned int resp = mh.recvByte();
 void
 deleteNewsgroup(MessageHandler mh)
 {
-	cout << "Name of the new Newsgroup?" << endl;
+	cout << "Name of the Newsgroup?" << endl;
 	string newsgroup_name;
 	getline(cin, newsgroup_name);
 	mh.sendString(newsgroup_name);
