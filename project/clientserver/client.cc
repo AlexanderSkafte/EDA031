@@ -275,7 +275,7 @@ deleteArticle(MessageHandler mh)
 	cout << "Name of the Newsgroup?" << endl;
 	string news_n;
 	getline(cin, news_n);
-	cout << "Name of the Artcle?" << endl;
+	cout << "Name of the Article?" << endl;
 	string art;
 	getline(cin, art);
 

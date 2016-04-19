@@ -85,7 +85,8 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
                 continue;
             }
             article_title   = get_name(newsgroup_dirp->d_name);
-            article_id      = get_id(newsgroup_dirp->d_name);
+            int article_id_nbr      = get_id(newsgroup_dirp->d_name);
+      
             article_path    = newsgroup_path + "/" + newsgroup_dirp->d_name;
             article_stream.open(article_path.c_str());
             
@@ -94,7 +95,7 @@ DiskMemoryDataBase::DiskMemoryDataBase(const string& root_path)
             while (getline(article_stream, line)) {
                 article_text += line + "\n";
             }
-            Article article(article_title, article_author, article_text);
+            Article article(article_id_nbr, article_author, article_text,article_title);
             article_stream.close();
             newsgroup.createArticle(article);
         }
@@ -247,29 +248,35 @@ DiskMemoryDataBase::deleteArticle(
               const string& newsgroup_title,
               const string& article_name)
 {
+    bool deleted_articles = false;
     auto newsgroup_itr = find_if(newsgroups.begin(), newsgroups.end(),
                        [newsgroup_title](Newsgroup ng) {
                            return newsgroup_title == ng.name();
                        });
     if (newsgroup_itr != newsgroups.end()) {
+        DIR *dp;
+        struct dirent *dirp;
+        ostringstream newsgroup_id_string;
+        newsgroup_id_string << newsgroup_itr->id();
+        string newsgroup_path = root_directory_path + "/" + newsgroup_id_string.str() + "_" +
+                                newsgroup_itr->name();
+        dp = opendir(newsgroup_path.c_str());
+        
+        while ((dirp = readdir(dp)) != NULL) {
+            string article_path = newsgroup_path + "/" + dirp->d_name;
+            if (get_name(dirp->d_name) == article_name) {
+                remove(article_path.c_str());
+            }
+        }
+        
         vector<Article> article_vec = newsgroup_itr->listNewsgroup();
-        
-        auto itr = find_if(article_vec.begin(), article_vec.end(),
-                           [article_name](Article a) {
-                               return article_name == a.title();
-                           });
-        
-        if (itr != article_vec.end()) {
-            ostringstream newsgroup_id_string, article_id_string;
-            newsgroup_id_string << itr->art_id();
-            article_id_string << itr->art_id();
-            
-            string article_path = root_directory_path + "/" + newsgroup_id_string.str() + "_" +
-                                    newsgroup_itr->name() + "/" + article_id_string.str() + "_" +
-                                    article_name;
-            
-            newsgroup_itr->deleteArticle(article_name);
-            remove(article_path.c_str());
+        for (auto a : article_vec) {
+            if (article_name == a.title()) {
+                newsgroup_itr->deleteArticle(article_name);
+                deleted_articles = true;
+            }
+        }
+        if (deleted_articles == true) {
             return Protocol::ANS_ACK;
         } else {
             return Protocol::ERR_ART_DOES_NOT_EXIST;
