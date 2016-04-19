@@ -15,15 +15,15 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	if (argc != 2 && argc != 3) {
-		cerr << "Usage: server_main host-name port-number" << endl;
+	if (argc != 2) {
+		cerr << "Usage: server_main port-number" << endl;
 		cout << argc << endl;
 		exit(1);
 	}
 
 	int port = -1;
 	try {
-		port = stoi(argv[2]);
+		port = stoi(argv[1]);
 	} catch (exception& e) {
 		cerr << "Wrong port number." << e.what() << endl;
 		exit(1);
