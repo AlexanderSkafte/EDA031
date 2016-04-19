@@ -36,6 +36,11 @@ testDisk: testDisk.o disk_memory_data_base.o newsgroup.o article.o connection.o 
 # Standard clean
 clean:
 	rm -f *.o $(PROGS)
+	rm -rf ./../bin
+
+install:
+	mkdir -p ./../bin
+	cp client server_main server_disk testDisk ./../bin
 
 # Generate dependencies in *.d files
 %.d: %.cc
