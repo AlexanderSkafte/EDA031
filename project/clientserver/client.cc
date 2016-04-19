@@ -224,7 +224,8 @@ listArticles(MessageHandler mh)
 	} else if (resp == Protocol::ANS_ACK) {
 		unsigned int size = mh.recvInt();
 		for (unsigned int i = 0; i<size; ++i) {
-			cout << mh.recvString() << endl;
+			cout << "Title: " << mh.recvString() << endl;
+			cout <<"Id: " << mh.recvInt() << endl;
 		}
 	}
 	
@@ -237,7 +238,7 @@ listArticles(MessageHandler mh)
 void
 createArticle(MessageHandler mh)
 {
-	cout << "Name of the new Newsgroup?" << endl;
+	cout << "Name of the Newsgroup?" << endl;
 	string news_n;
 	getline(cin, news_n);
 	cout << "Name of the title?" << endl;
@@ -305,7 +306,7 @@ getArticle(MessageHandler mh)
 	cout << "Name of the Newsgroup?" << endl;
 	string news_n;
 	getline(cin, news_n);
-	cout << "Name of the Artcle?" << endl;
+	cout << "Name of the Article?" << endl;
 	string title;
 	getline(cin, title);
 
@@ -315,14 +316,14 @@ getArticle(MessageHandler mh)
 
 	unsigned char resp = mh.recvByte();
 	if (resp == Protocol::ANS_NAK) {
-		cout << "No such article/newsgroup." << endl;
+		cout << "No such Article/Newsgroup." << endl;
 	} else if (resp == Protocol::ANS_ACK) {
-		size_t s = mh.recvInt();
-		for (size_t i = 0; i < s; ++i) {
-			cout << mh.recvInt() << " ";
-			cout << mh.recvString() << " ";
-			cout << mh.recvString() << " ";
-			cout << mh.recvString() << endl;
+		int s = mh.recvInt();
+		for (int i = 0; i < s; ++i) {
+			cout <<"Id: " <<  mh.recvInt() << endl;
+			cout << "Title: " << mh.recvString() << endl;
+			cout << "Author: " << mh.recvString() << endl;
+			cout << "Text: " << mh.recvString() << endl;
 		}
 	} else {
 		//error?

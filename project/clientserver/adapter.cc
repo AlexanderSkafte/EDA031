@@ -92,6 +92,7 @@ Adapter::listArticles(MessageHandler& mh){
 		mh.sendInt(vec.size());
 		for (auto i = vec.begin(); i<vec.end(); i++) {
 			mh.sendString(i->title());
+			mh.sendInt(i->art_id());
 		}
 	}
 

@@ -131,6 +131,7 @@ DiskMemoryDataBase::createNewsgroup(
              });
     
     if (itr == newsgroups.end()) {
+        ++newsgroup_id;
         ostringstream           newsgroup_id_string;
         newsgroup_id_string <<  newsgroup_id;
         
@@ -142,7 +143,6 @@ DiskMemoryDataBase::createNewsgroup(
             cout << "Error(" << errno << ") creating " << newsgroup_path << endl;
             //Borde returnera ett error här. Vet dock inte vad det skulle vara...
         }
-        ++newsgroup_id;
         Newsgroup newsgroup(newsgroup_id, newsgroup_title);
         newsgroups.push_back(newsgroup);
         write_to_init(article_id, newsgroup_id);
@@ -194,8 +194,8 @@ DiskMemoryDataBase::createArticle(
            const string& text)
 {
     
-    string current_newsgroup_id;
-    Article article(article_id, article_name, author, text);
+    int current_newsgroup_id;
+    Article article(article_id, author, text, article_name);
     auto itr = find_if(newsgroups.begin(), newsgroups.end(),
                        [newsgroup_title](Newsgroup ng) {
                            return ng.name() == newsgroup_title;
@@ -211,18 +211,26 @@ DiskMemoryDataBase::createArticle(
         current_newsgroup_id = newsgroup.id();
     }
     ++article_id;
-    string newsgroup_path = root_directory_path + "/" + current_newsgroup_id +
+    stringstream ss;
+    ss << current_newsgroup_id;
+    string temp = ss.str();
+    string newsgroup_path = root_directory_path + "/" + temp +
                             "_" + newsgroup_title;
     ofstream article_file;
     ostringstream stringed_article_id;
     stringed_article_id << article_id;
-    article_file.open(newsgroup_path + "/" + stringed_article_id.str() + "_" + article_name);
+    string path = newsgroup_path +  "/" + stringed_article_id.str() + "_" + article_name;
+    article_file.open(path);
+
+    
+    if (!article_file.is_open()) {
+        exit(1);
+    }
     article_file << article_id << "\n";
     article_file << author + "\n";
     article_file << text;
-    write_to_init(article_id, newsgroup_id);
-    
     article_file.close();
+    write_to_init(article_id, newsgroup_id);
 }
 
 int
